@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-websocket/app/services/grpcService"
+	"go-websocket/app/services/task"
 	"go-websocket/config"
 	routers "go-websocket/routes"
 	services "go-websocket/utils"
@@ -18,7 +19,7 @@ func main() {
 	rand.Seed(time.Now().UnixNano()) //全局随机种子
 	Init()
 	r := routers.SetupRouter()
-	services.StartTask() //开启异步定时任务
+	task.StartTask() //开启异步定时任务
 	formatNow := time.Now().Format("2006-01-02 15:04:05")
 	fmt.Println(fmt.Sprintf("服务器时间：%s,北京时间：%s", formatNow, Timer.NowStr()))
 	fmt.Println(fmt.Sprintf("本机IP地址GetServIp方式获得：%s；GetLocalIp方式获得：%s", services.GetServIp(), services.GetLocalIp()))

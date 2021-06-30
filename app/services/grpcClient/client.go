@@ -1,9 +1,9 @@
 package grpcClient
 
 import (
-	"go-websocket/protobuf/pb"
 	"fmt"
 	"github.com/spf13/cast"
+	"go-websocket/protobuf/pb"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -34,16 +34,26 @@ func grpcConn(addr string) *grpc.ClientConn {
 	return conn
 }
 
-//发送用户给单个用户
-func SendToUserMsg(addr string, toUserId, uid, zone int, data []byte) {
-	fmt.Println("客户端准备开始发送信息:", addr, toUserId, uid, string(data))
+//给单个用户发送信息
+func SendToUserMsg(addr string, toUserId int, data []byte) {
+	fmt.Println("客户端准备开始发送信息:", addr, toUserId, string(data))
 	conn := grpcConn(addr)
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)
 	c.SendToUserMsgToLocal(context.Background(), &pb.SendToUserMsgToLocalRequest{
 		UserId: cast.ToInt64(toUserId),
-		Uid:    cast.ToInt64(uid),
-		Zone:   cast.ToInt64(zone),
 		Data:   data,
+	})
+}
+
+//给群发送消息
+func SendToGroupMsgToLocal(addr string, toGroupId int, data []byte) {
+	fmt.Println("客户端准备开始发送信息:", addr, toGroupId, string(data))
+	conn := grpcConn(addr)
+	defer conn.Close()
+	c := pb.NewGreeterClient(conn)
+	c.SendToGroupMsgToLocal(context.Background(), &pb.SendToGroupMsgToLocalRequest{
+		GroupId: cast.ToInt64(toGroupId),
+		Data:    data,
 	})
 }

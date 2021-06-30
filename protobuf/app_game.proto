@@ -7,18 +7,27 @@ option go_package = "./pb";
 service Greeter {
   // SayHello 方法
   rpc SayHello (HelloRequest) returns (HelloReply) {}
-  rpc SendToUserMsgToLocal (SendToUserMsgToLocalRequest) returns (Send2SystemReply) {}
+  rpc SendToUserMsgToLocal (SendToUserMsgToLocalRequest) returns (SendUserReply) {}
+  rpc SendToGroupMsgToLocal (SendToGroupMsgToLocalRequest) returns (SendGroupReply) {}
 }
 
 // 包含人名的一个请求消息
 message SendToUserMsgToLocalRequest {
   int64 userId = 1;
-  int64 uid = 2;
-  int64 zone = 3;
-  bytes data = 4;
+  bytes data = 2;
 }
 
-message Send2SystemReply {
+message SendUserReply {
+  //  string message = 1;
+}
+
+// 包含人名的一个请求消息
+message SendToGroupMsgToLocalRequest {
+  int64 groupId = 1;
+  bytes data = 2;
+}
+
+message SendGroupReply {
   //  string message = 1;
 }
 

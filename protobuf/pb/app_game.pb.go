@@ -31,9 +31,7 @@ type SendToUserMsgToLocalRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	UserId int64  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
-	Uid    int64  `protobuf:"varint,2,opt,name=uid,proto3" json:"uid,omitempty"`
-	Zone   int64  `protobuf:"varint,3,opt,name=zone,proto3" json:"zone,omitempty"`
-	Data   []byte `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	Data   []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
 func (x *SendToUserMsgToLocalRequest) Reset() {
@@ -75,20 +73,6 @@ func (x *SendToUserMsgToLocalRequest) GetUserId() int64 {
 	return 0
 }
 
-func (x *SendToUserMsgToLocalRequest) GetUid() int64 {
-	if x != nil {
-		return x.Uid
-	}
-	return 0
-}
-
-func (x *SendToUserMsgToLocalRequest) GetZone() int64 {
-	if x != nil {
-		return x.Zone
-	}
-	return 0
-}
-
 func (x *SendToUserMsgToLocalRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
@@ -96,14 +80,14 @@ func (x *SendToUserMsgToLocalRequest) GetData() []byte {
 	return nil
 }
 
-type Send2SystemReply struct {
+type SendUserReply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *Send2SystemReply) Reset() {
-	*x = Send2SystemReply{}
+func (x *SendUserReply) Reset() {
+	*x = SendUserReply{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_game_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -111,13 +95,13 @@ func (x *Send2SystemReply) Reset() {
 	}
 }
 
-func (x *Send2SystemReply) String() string {
+func (x *SendUserReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Send2SystemReply) ProtoMessage() {}
+func (*SendUserReply) ProtoMessage() {}
 
-func (x *Send2SystemReply) ProtoReflect() protoreflect.Message {
+func (x *SendUserReply) ProtoReflect() protoreflect.Message {
 	mi := &file_app_game_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -129,9 +113,103 @@ func (x *Send2SystemReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Send2SystemReply.ProtoReflect.Descriptor instead.
-func (*Send2SystemReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use SendUserReply.ProtoReflect.Descriptor instead.
+func (*SendUserReply) Descriptor() ([]byte, []int) {
 	return file_app_game_proto_rawDescGZIP(), []int{1}
+}
+
+// 包含人名的一个请求消息
+type SendToGroupMsgToLocalRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	GroupId int64  `protobuf:"varint,1,opt,name=groupId,proto3" json:"groupId,omitempty"`
+	Data    []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *SendToGroupMsgToLocalRequest) Reset() {
+	*x = SendToGroupMsgToLocalRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_app_game_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SendToGroupMsgToLocalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendToGroupMsgToLocalRequest) ProtoMessage() {}
+
+func (x *SendToGroupMsgToLocalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_app_game_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendToGroupMsgToLocalRequest.ProtoReflect.Descriptor instead.
+func (*SendToGroupMsgToLocalRequest) Descriptor() ([]byte, []int) {
+	return file_app_game_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SendToGroupMsgToLocalRequest) GetGroupId() int64 {
+	if x != nil {
+		return x.GroupId
+	}
+	return 0
+}
+
+func (x *SendToGroupMsgToLocalRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type SendGroupReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *SendGroupReply) Reset() {
+	*x = SendGroupReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_app_game_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SendGroupReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendGroupReply) ProtoMessage() {}
+
+func (x *SendGroupReply) ProtoReflect() protoreflect.Message {
+	mi := &file_app_game_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendGroupReply.ProtoReflect.Descriptor instead.
+func (*SendGroupReply) Descriptor() ([]byte, []int) {
+	return file_app_game_proto_rawDescGZIP(), []int{3}
 }
 
 // 包含人名的一个请求消息
@@ -146,7 +224,7 @@ type HelloRequest struct {
 func (x *HelloRequest) Reset() {
 	*x = HelloRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_game_proto_msgTypes[2]
+		mi := &file_app_game_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -159,7 +237,7 @@ func (x *HelloRequest) String() string {
 func (*HelloRequest) ProtoMessage() {}
 
 func (x *HelloRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_game_proto_msgTypes[2]
+	mi := &file_app_game_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -172,7 +250,7 @@ func (x *HelloRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloRequest.ProtoReflect.Descriptor instead.
 func (*HelloRequest) Descriptor() ([]byte, []int) {
-	return file_app_game_proto_rawDescGZIP(), []int{2}
+	return file_app_game_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *HelloRequest) GetName() string {
@@ -194,7 +272,7 @@ type HelloReply struct {
 func (x *HelloReply) Reset() {
 	*x = HelloReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_game_proto_msgTypes[3]
+		mi := &file_app_game_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -207,7 +285,7 @@ func (x *HelloReply) String() string {
 func (*HelloReply) ProtoMessage() {}
 
 func (x *HelloReply) ProtoReflect() protoreflect.Message {
-	mi := &file_app_game_proto_msgTypes[3]
+	mi := &file_app_game_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -220,7 +298,7 @@ func (x *HelloReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloReply.ProtoReflect.Descriptor instead.
 func (*HelloReply) Descriptor() ([]byte, []int) {
-	return file_app_game_proto_rawDescGZIP(), []int{3}
+	return file_app_game_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *HelloReply) GetMessage() string {
@@ -234,30 +312,38 @@ var File_app_game_proto protoreflect.FileDescriptor
 
 var file_app_game_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x61, 0x70, 0x70, 0x5f, 0x67, 0x61, 0x6d, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x12, 0x02, 0x70, 0x62, 0x22, 0x6f, 0x0a, 0x1b, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f, 0x55, 0x73,
+	0x12, 0x02, 0x70, 0x62, 0x22, 0x49, 0x0a, 0x1b, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f, 0x55, 0x73,
 	0x65, 0x72, 0x4d, 0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x75,
-	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x12, 0x0a,
-	0x04, 0x7a, 0x6f, 0x6e, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x7a, 0x6f, 0x6e,
-	0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x12, 0x0a, 0x10, 0x53, 0x65, 0x6e, 0x64, 0x32, 0x53, 0x79,
-	0x73, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x22, 0x0a, 0x0c, 0x48, 0x65, 0x6c,
-	0x6c, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x26, 0x0a,
-	0x0a, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x8a, 0x01, 0x0a, 0x07, 0x47, 0x72, 0x65, 0x65, 0x74, 0x65,
-	0x72, 0x12, 0x2e, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x10, 0x2e,
-	0x70, 0x62, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x0e, 0x2e, 0x70, 0x62, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
-	0x00, 0x12, 0x4f, 0x0a, 0x14, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f, 0x55, 0x73, 0x65, 0x72, 0x4d,
-	0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x12, 0x1f, 0x2e, 0x70, 0x62, 0x2e, 0x53,
-	0x65, 0x6e, 0x64, 0x54, 0x6f, 0x55, 0x73, 0x65, 0x72, 0x4d, 0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f,
-	0x63, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x70, 0x62, 0x2e,
-	0x53, 0x65, 0x6e, 0x64, 0x32, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x22, 0x00, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64,
+	0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22,
+	0x0f, 0x0a, 0x0d, 0x53, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x70, 0x6c, 0x79,
+	0x22, 0x4c, 0x0a, 0x1c, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x4d,
+	0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x18, 0x0a, 0x07, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x07, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x10,
+	0x0a, 0x0e, 0x53, 0x65, 0x6e, 0x64, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x70, 0x6c, 0x79,
+	0x22, 0x22, 0x0a, 0x0c, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x22, 0x26, 0x0a, 0x0a, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x70,
+	0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xd8, 0x01, 0x0a,
+	0x07, 0x47, 0x72, 0x65, 0x65, 0x74, 0x65, 0x72, 0x12, 0x2e, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48,
+	0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x10, 0x2e, 0x70, 0x62, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0e, 0x2e, 0x70, 0x62, 0x2e, 0x48, 0x65, 0x6c, 0x6c,
+	0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x14, 0x53, 0x65, 0x6e, 0x64,
+	0x54, 0x6f, 0x55, 0x73, 0x65, 0x72, 0x4d, 0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c,
+	0x12, 0x1f, 0x2e, 0x70, 0x62, 0x2e, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f, 0x55, 0x73, 0x65, 0x72,
+	0x4d, 0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x11, 0x2e, 0x70, 0x62, 0x2e, 0x53, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52,
+	0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x15, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f,
+	0x47, 0x72, 0x6f, 0x75, 0x70, 0x4d, 0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x12,
+	0x20, 0x2e, 0x70, 0x62, 0x2e, 0x53, 0x65, 0x6e, 0x64, 0x54, 0x6f, 0x47, 0x72, 0x6f, 0x75, 0x70,
+	0x4d, 0x73, 0x67, 0x54, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x12, 0x2e, 0x70, 0x62, 0x2e, 0x53, 0x65, 0x6e, 0x64, 0x47, 0x72, 0x6f, 0x75, 0x70,
+	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x2f, 0x70, 0x62, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -272,20 +358,24 @@ func file_app_game_proto_rawDescGZIP() []byte {
 	return file_app_game_proto_rawDescData
 }
 
-var file_app_game_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_app_game_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_app_game_proto_goTypes = []interface{}{
-	(*SendToUserMsgToLocalRequest)(nil), // 0: pb.SendToUserMsgToLocalRequest
-	(*Send2SystemReply)(nil),            // 1: pb.Send2SystemReply
-	(*HelloRequest)(nil),                // 2: pb.HelloRequest
-	(*HelloReply)(nil),                  // 3: pb.HelloReply
+	(*SendToUserMsgToLocalRequest)(nil),  // 0: pb.SendToUserMsgToLocalRequest
+	(*SendUserReply)(nil),                // 1: pb.SendUserReply
+	(*SendToGroupMsgToLocalRequest)(nil), // 2: pb.SendToGroupMsgToLocalRequest
+	(*SendGroupReply)(nil),               // 3: pb.SendGroupReply
+	(*HelloRequest)(nil),                 // 4: pb.HelloRequest
+	(*HelloReply)(nil),                   // 5: pb.HelloReply
 }
 var file_app_game_proto_depIdxs = []int32{
-	2, // 0: pb.Greeter.SayHello:input_type -> pb.HelloRequest
+	4, // 0: pb.Greeter.SayHello:input_type -> pb.HelloRequest
 	0, // 1: pb.Greeter.SendToUserMsgToLocal:input_type -> pb.SendToUserMsgToLocalRequest
-	3, // 2: pb.Greeter.SayHello:output_type -> pb.HelloReply
-	1, // 3: pb.Greeter.SendToUserMsgToLocal:output_type -> pb.Send2SystemReply
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	2, // 2: pb.Greeter.SendToGroupMsgToLocal:input_type -> pb.SendToGroupMsgToLocalRequest
+	5, // 3: pb.Greeter.SayHello:output_type -> pb.HelloReply
+	1, // 4: pb.Greeter.SendToUserMsgToLocal:output_type -> pb.SendUserReply
+	3, // 5: pb.Greeter.SendToGroupMsgToLocal:output_type -> pb.SendGroupReply
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -310,7 +400,7 @@ func file_app_game_proto_init() {
 			}
 		}
 		file_app_game_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Send2SystemReply); i {
+			switch v := v.(*SendUserReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -322,7 +412,7 @@ func file_app_game_proto_init() {
 			}
 		}
 		file_app_game_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HelloRequest); i {
+			switch v := v.(*SendToGroupMsgToLocalRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -334,6 +424,30 @@ func file_app_game_proto_init() {
 			}
 		}
 		file_app_game_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SendGroupReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_app_game_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HelloRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_app_game_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*HelloReply); i {
 			case 0:
 				return &v.state
@@ -352,7 +466,7 @@ func file_app_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_app_game_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -380,7 +494,8 @@ const _ = grpc.SupportPackageIsVersion6
 type GreeterClient interface {
 	// SayHello 方法
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
-	SendToUserMsgToLocal(ctx context.Context, in *SendToUserMsgToLocalRequest, opts ...grpc.CallOption) (*Send2SystemReply, error)
+	SendToUserMsgToLocal(ctx context.Context, in *SendToUserMsgToLocalRequest, opts ...grpc.CallOption) (*SendUserReply, error)
+	SendToGroupMsgToLocal(ctx context.Context, in *SendToGroupMsgToLocalRequest, opts ...grpc.CallOption) (*SendGroupReply, error)
 }
 
 type greeterClient struct {
@@ -400,9 +515,18 @@ func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...
 	return out, nil
 }
 
-func (c *greeterClient) SendToUserMsgToLocal(ctx context.Context, in *SendToUserMsgToLocalRequest, opts ...grpc.CallOption) (*Send2SystemReply, error) {
-	out := new(Send2SystemReply)
+func (c *greeterClient) SendToUserMsgToLocal(ctx context.Context, in *SendToUserMsgToLocalRequest, opts ...grpc.CallOption) (*SendUserReply, error) {
+	out := new(SendUserReply)
 	err := c.cc.Invoke(ctx, "/pb.Greeter/SendToUserMsgToLocal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *greeterClient) SendToGroupMsgToLocal(ctx context.Context, in *SendToGroupMsgToLocalRequest, opts ...grpc.CallOption) (*SendGroupReply, error) {
+	out := new(SendGroupReply)
+	err := c.cc.Invoke(ctx, "/pb.Greeter/SendToGroupMsgToLocal", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -413,7 +537,8 @@ func (c *greeterClient) SendToUserMsgToLocal(ctx context.Context, in *SendToUser
 type GreeterServer interface {
 	// SayHello 方法
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
-	SendToUserMsgToLocal(context.Context, *SendToUserMsgToLocalRequest) (*Send2SystemReply, error)
+	SendToUserMsgToLocal(context.Context, *SendToUserMsgToLocalRequest) (*SendUserReply, error)
+	SendToGroupMsgToLocal(context.Context, *SendToGroupMsgToLocalRequest) (*SendGroupReply, error)
 }
 
 // UnimplementedGreeterServer can be embedded to have forward compatible implementations.
@@ -423,8 +548,11 @@ type UnimplementedGreeterServer struct {
 func (*UnimplementedGreeterServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (*UnimplementedGreeterServer) SendToUserMsgToLocal(context.Context, *SendToUserMsgToLocalRequest) (*Send2SystemReply, error) {
+func (*UnimplementedGreeterServer) SendToUserMsgToLocal(context.Context, *SendToUserMsgToLocalRequest) (*SendUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendToUserMsgToLocal not implemented")
+}
+func (*UnimplementedGreeterServer) SendToGroupMsgToLocal(context.Context, *SendToGroupMsgToLocalRequest) (*SendGroupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendToGroupMsgToLocal not implemented")
 }
 
 func RegisterGreeterServer(s *grpc.Server, srv GreeterServer) {
@@ -467,6 +595,24 @@ func _Greeter_SendToUserMsgToLocal_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Greeter_SendToGroupMsgToLocal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendToGroupMsgToLocalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GreeterServer).SendToGroupMsgToLocal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Greeter/SendToGroupMsgToLocal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GreeterServer).SendToGroupMsgToLocal(ctx, req.(*SendToGroupMsgToLocalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Greeter_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.Greeter",
 	HandlerType: (*GreeterServer)(nil),
@@ -478,6 +624,10 @@ var _Greeter_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendToUserMsgToLocal",
 			Handler:    _Greeter_SendToUserMsgToLocal_Handler,
+		},
+		{
+			MethodName: "SendToGroupMsgToLocal",
+			Handler:    _Greeter_SendToGroupMsgToLocal_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,4 +1,4 @@
-package BindInfo
+package BindCenter
 
 import (
 	"encoding/json"
@@ -10,8 +10,7 @@ import (
 const keys = "uBindServ"
 
 type BindUserInfo struct {
-	Addr    string //最后一次登录的地址
-	RpcPort string //登录的服务器rpc端口
+	RpcAddr string //最后一次登录的服务器的rpc链接地址
 	UserId  int    // 用户Id，用户登录以后才有
 }
 
@@ -31,8 +30,7 @@ func GetBindInfo(userId int) BindUserInfo {
 //将用户与应用服务器地址绑定
 func BindUidAndService(userId int) bool {
 	b, err := json.Marshal(BindUserInfo{
-		Addr:    utils.GetLocalIp(),
-		RpcPort: config.GetConfClient().Server.RpcPort,
+		RpcAddr: utils.GetLocalIp() + ":" + config.GetConfClient().Server.RpcPort,
 		UserId:  userId,
 	})
 	if err == nil {

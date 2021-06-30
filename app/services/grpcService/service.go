@@ -2,6 +2,8 @@ package grpcService
 
 import (
 	"fmt"
+	"github.com/spf13/cast"
+	"go-websocket/app/services/websocket"
 	"go-websocket/config"
 	"go-websocket/protobuf/pb"
 	"net"
@@ -18,11 +20,18 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
 }
 
-func (s *server) SendToUserMsgToLocal(ctx context.Context, in *pb.SendToUserMsgToLocalRequest) (*pb.Send2SystemReply, error) {
-	fmt.Println("服务端rpc调用成功")
-	fmt.Println(in.Uid, in.UserId, in.Zone, string(in.Data))
-	//websocket.SendToUserMsgLocal(cast.ToInt(in.UserId), cast.ToInt(in.Uid), cast.ToInt(in.Zone), in.Data)
-	return &pb.Send2SystemReply{}, nil
+func (s *server) SendToUserMsgToLocal(ctx context.Context, in *pb.SendToUserMsgToLocalRequest) (*pb.SendUserReply, error) {
+	fmt.Println("服务端SendToUserMsgToLocal rpc调用成功")
+	fmt.Println(in.UserId, string(in.Data))
+	websocket.SendToUserMsgLocal(cast.ToInt(in.UserId), in.Data)
+	return &pb.SendUserReply{}, nil
+}
+
+func (s *server) SendToGroupMsgToLocal(ctx context.Context, in *pb.SendToGroupMsgToLocalRequest) (*pb.SendGroupReply, error) {
+	fmt.Println("服务端SendToGroupMsgToLocal rpc调用成功")
+	fmt.Println(in.GroupId, string(in.Data))
+	websocket.SendToGroupMsgToLocal(cast.ToInt(in.GroupId), in.Data)
+	return &pb.SendGroupReply{}, nil
 }
 
 func InitGrpcServer() {
