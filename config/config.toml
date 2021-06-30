@@ -1,0 +1,25 @@
+# This is a TOML document.
+
+title = "TOML Config"
+
+#转发服务器配置
+[Server]
+Port = "12223"
+RpcPort = "8972"#grpc通信的端口地址
+mode = 0 #1 启动websocket方式 0 启动http方式
+Cluster = false #true集群false非集群
+#redis连接配置
+[Redis]
+Addr = "127.0.0.1:6379"   #数据库连接地址
+Password = ""            #数据库密码
+DB = 1                  #数据库位置
+
+#MySQL连接配置
+[MySQL]
+Addr = "root:root@tcp(127.0.0.1:3306)/shanhehuashi"
+TablePrefix = "t_"#表前缀
+
+[CommonConf]
+ImagesFolder = "images"#图片本地文件夹
+IsOpenWebsocket = true#false关闭true开启
+MgCk = "/bs/mgck/mgck.json"

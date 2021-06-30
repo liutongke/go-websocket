@@ -1,0 +1,33 @@
+syntax = "proto3"; // 版本声明，使用Protocol Buffers v3版本
+
+package pb; // 包名
+
+option go_package = "./pb";
+// 定义一个打招呼服务
+service Greeter {
+  // SayHello 方法
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SendToUserMsgToLocal (SendToUserMsgToLocalRequest) returns (Send2SystemReply) {}
+}
+
+// 包含人名的一个请求消息
+message SendToUserMsgToLocalRequest {
+  int64 userId = 1;
+  int64 uid = 2;
+  int64 zone = 3;
+  bytes data = 4;
+}
+
+message Send2SystemReply {
+  //  string message = 1;
+}
+
+// 包含人名的一个请求消息
+message HelloRequest {
+  string name = 1;
+}
+
+//    包含问候语的响应消息
+message HelloReply {
+  string message = 1;
+}
