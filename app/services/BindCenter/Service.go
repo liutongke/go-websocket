@@ -6,6 +6,8 @@ import (
 	"go-websocket/config"
 	"go-websocket/global"
 	"go-websocket/utils"
+	"go-websocket/utils/RdLine"
+	"go-websocket/utils/Timer"
 	"strings"
 )
 
@@ -46,4 +48,15 @@ func GetStrToService(str string) (server *Service, err error) {
 		Rpcport: list[1],
 	}
 	return
+}
+
+//获取所有的服务器
+func GetAllService() []string {
+	RdLine := RdLine.GetRedisClient()
+	defer RdLine.CloseRedisClient()
+	list, err := RdLine.Strings(RdLine.Exec("ZREVRANGEBYSCORE", getServiceKey, Timer.NowUnix(), Timer.OffsetUinx(-(F5ServiceTm * 3))))
+	if err != nil {
+		return nil
+	}
+	return list
 }
