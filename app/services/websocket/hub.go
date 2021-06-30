@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"github.com/spf13/cast"
 	"github.com/tidwall/gjson"
 	"sync"
 )
@@ -65,7 +64,7 @@ func (h *Hub) run() {
 			zone := gjson.Get(zoneMsg, "zone").Int()
 			msg := gjson.Get(zoneMsg, "msg").String()
 			if zone > 0 && len(msg) > 0 {
-				h.SendGroupMsg(cast.ToInt(zone), []byte(msg))
+				//h.SendGroupMsg(cast.ToInt(zone), []byte(msg))
 			}
 		}
 	}

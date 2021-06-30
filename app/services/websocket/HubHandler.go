@@ -140,37 +140,3 @@ func ClearTimeoutConnections() {
 		}
 	}
 }
-
-// 获取本地分组的成员
-func (h *Hub) GetGroupClientList(zone int) []*Client {
-	h.GroupLock.RLock()
-	defer h.GroupLock.RUnlock()
-	return h.Groups[zone]
-}
-
-// 添加到本地分组
-func (h *Hub) addClient2Group(zone int, client *Client) {
-	h.GroupLock.Lock()
-	defer h.GroupLock.Unlock()
-	h.Groups[zone] = append(h.Groups[zone], client)
-}
-
-// 删除分组里的客户端
-func (h *Hub) delGroupClient(zone int, client *Client) {
-	h.GroupLock.Lock()
-	defer h.GroupLock.Unlock()
-
-	for index, v := range h.Groups[zone] {
-		if v.UserId == client.UserId {
-			h.Groups[zone] = append(h.Groups[zone][:index], h.Groups[zone][index+1:]...)
-		}
-	}
-}
-
-//给指定分组发送消息
-func (h *Hub) SendGroupMsg(zone int, msg []byte) {
-	groupClientList := h.GetGroupClientList(zone)
-	for _, client := range groupClientList {
-		client.SendMsg(msg)
-	}
-}

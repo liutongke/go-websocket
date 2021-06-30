@@ -10,8 +10,7 @@ import (
 	"time"
 )
 
-//单个用户管理
-// 用户连接
+// 用户连接管理
 type Client struct {
 	Hub           *Hub
 	Ws            *websocket.Conn // 客户端的用户连接
