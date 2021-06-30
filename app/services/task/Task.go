@@ -53,7 +53,7 @@ func delServiceCenter(param interface{}) {
 	}()
 
 	fmt.Println("定时任务，清理服务器注册中心", param)
-	BindCenter.SetService()
+	BindCenter.DelTimeoutService()
 
 	return
 }
