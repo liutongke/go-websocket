@@ -14,8 +14,8 @@ func Recovers() gin.HandlerFunc {
 		defer func() {
 			if err := recover(); err != nil {
 				DebugStack := ""
-				for _, v := range strings.Split(string(debug.Stack()), "\n") {
-					DebugStack += v + "\n\n"
+				for _, v := range strings.Split(string(debug.Stack()), "\n\t") {
+					DebugStack += v + "\n\t"
 				}
 				fmt.Println("->>>", DebugStack)
 				fmt.Println("->:", err)

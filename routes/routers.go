@@ -39,6 +39,7 @@ func apiRouter(r *gin.Engine) {
 	r.GET("User/SendMsgALl", Controller.SendGlobalServMsg)       //发送全服信息
 	r.GET("User/SendUserMsg/:userId", Controller.SendUserMsg)    //给单个用户发送消息
 	r.GET("User/SendGroupMsg/:groupId", Controller.SendGroupMsg) //给单个用户发送消息
+	r.GET("Status", Controller.Status)                           //服务器健康
 	r.GET("User/GetInfo", Controller.GetUserInfo)                //获取用户信息
 	r.GET("ping", func(c *gin.Context) {
 		data := make(map[string]interface{})
