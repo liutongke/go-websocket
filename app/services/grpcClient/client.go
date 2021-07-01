@@ -27,10 +27,12 @@ import (
 
 func grpcConn(addr string) *grpc.ClientConn {
 	// 连接服务器
-	conn, err := grpc.Dial(addr+":8972", grpc.WithInsecure())
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
-		fmt.Printf("faild to connect: %v", err)
+		fmt.Printf(fmt.Sprintf("faild to connect: %v", err))
+		return nil
 	}
+	fmt.Println("grpc状态：", conn, conn.GetState())
 	return conn
 }
 
@@ -59,6 +61,7 @@ func SendGroupMsgToLocal(addr string, toGroupId int, data []byte) {
 }
 
 func SendMsgALl(addr string, data []byte) {
+	fmt.Println("客户端SendMsgALl准备开始发送信息:", addr, string(data))
 	conn := grpcConn(addr)
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)

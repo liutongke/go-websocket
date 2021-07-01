@@ -54,7 +54,7 @@ func GetStrToService(str string) (server *Service, err error) {
 func GetAllService() []string {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()
-	list, err := RdLine.Strings(RdLine.Exec("ZREVRANGEBYSCORE", getServiceKey, Timer.NowUnix(), Timer.OffsetUinx(-(F5ServiceTm * 3))))
+	list, err := RdLine.Strings(RdLine.Exec("ZREVRANGEBYSCORE", getServiceKey(), Timer.NowUnix(), Timer.OffsetUinx(-(F5ServiceTm * 3))))
 	if err != nil {
 		return nil
 	}
