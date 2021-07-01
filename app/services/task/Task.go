@@ -11,8 +11,8 @@ import (
 func StartTask() {
 	//var d = 5 * time.Second
 	PingTimer(cleanConnection, "", 300*time.Second)
-	PingTimer(initServiceCenter, "", BindCenter.F5ServiceTm*time.Second)
-	PingTimer(delServiceCenter, "", BindCenter.F5ServiceTm*3*time.Second)
+	PingTimer(initServiceCenter, "", bindCenter.F5ServiceTm*time.Second)
+	PingTimer(delServiceCenter, "", bindCenter.F5ServiceTm*3*time.Second)
 }
 
 // 清理超时连接任务
@@ -39,7 +39,7 @@ func initServiceCenter(param interface{}) {
 	}()
 
 	fmt.Println("定时任务，服务器注册中心", param)
-	BindCenter.SetService()
+	bindCenter.SetService()
 
 	return
 }
@@ -53,7 +53,7 @@ func delServiceCenter(param interface{}) {
 	}()
 
 	fmt.Println("定时任务，清理服务器注册中心", param)
-	BindCenter.DelTimeoutService()
+	bindCenter.DelTimeoutService()
 
 	return
 }

@@ -11,7 +11,7 @@ import (
 
 //给所有用户发送消息
 func SendMsgALl(data map[string]interface{}) {
-	serviceList := BindCenter.GetAllService()
+	serviceList := bindCenter.GetAllService()
 
 	b, _ := json.Marshal(Response{
 		Err:  http.StatusOK,
@@ -26,7 +26,7 @@ func SendMsgALl(data map[string]interface{}) {
 		return
 	}
 
-	localAddr := BindCenter.GetServiceToStr()
+	localAddr := bindCenter.GetServiceToStr()
 	for _, addr := range serviceList {
 		if strings.Compare(localAddr, addr) != 0 {
 			grpcClient.SendMsgALl(addr, b) //全服发送
@@ -59,8 +59,8 @@ func SendUserMsg(toUserId int, data map[string]interface{}) {
 		toClient.SendMsg(b)
 	}
 
-	bindInfo := BindCenter.GetBindInfo(toUserId) //不在本机上则调用GRPC
-	if bindInfo == (BindCenter.BindUserInfo{}) {
+	bindInfo := bindCenter.GetBindInfo(toUserId) //不在本机上则调用GRPC
+	if bindInfo == (bindCenter.BindUserInfo{}) {
 		//用户未登录
 		fmt.Println("用户未登录")
 		return
