@@ -9,7 +9,7 @@ const (
 	serviceKey    = "bind:service" // 全部的服务器
 	serversKeyTtl = 86400          // key过期时间
 	//ServiceTimeout = 60             // 超时时间
-	F5ServiceTm = 2 //刷新写入时间
+	F5ServiceTm = 10 //刷新写入时间
 )
 
 func getServiceKey() (key string) {
