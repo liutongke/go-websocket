@@ -32,5 +32,5 @@ func SetService() {
 func DelTimeoutService() {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()
-	RdLine.Exec("ZREMRANGEBYSCORE", getServiceKey(), 0, Timer.OffsetUinx(F5ServiceTm*2))
+	RdLine.Exec("ZREMRANGEBYSCORE", getServiceKey(), 0, Timer.OffsetUinx(-(F5ServiceTm * 2)))
 }
