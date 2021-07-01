@@ -27,7 +27,7 @@ import (
 
 func grpcConn(addr string) *grpc.ClientConn {
 	// 连接服务器
-	conn, err := grpc.Dial(addr+":8972", grpc.WithInsecure())
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		fmt.Printf("faild to connect: %v", err)
 	}

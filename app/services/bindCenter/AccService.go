@@ -1,6 +1,7 @@
 package bindCenter
 
 import (
+	"fmt"
 	"go-websocket/utils/RdLine"
 	"go-websocket/utils/Timer"
 )
@@ -13,16 +14,16 @@ const (
 )
 
 func getServiceKey() (key string) {
-	return serviceKey
-	//return fmt.Sprintf("%s", serviceKey)
+	//return serviceKey
+	return fmt.Sprintf("%s", serviceKey)
 }
 
 //将服务器信息存入redis
 func SetService() {
 	pipe := RdLine.GetPipeClient()
 	defer pipe.ClosePipeClient()
-	pipe.Add("ZADD", getServiceKey, Timer.NowUnix(), GetServiceToStr())
-	pipe.Add("Expire", getServiceKey, serversKeyTtl)
+	pipe.Add("ZADD", getServiceKey(), Timer.NowUnix(), GetServiceToStr())
+	pipe.Add("Expire", getServiceKey(), serversKeyTtl)
 	pipe.ExecPipe()
 	pipe.RecvPipe()
 }
@@ -31,5 +32,5 @@ func SetService() {
 func DelTimeoutService() {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()
-	RdLine.Exec("ZREMRANGEBYSCORE", getServiceKey, 0, Timer.OffsetUinx(F5ServiceTm*2))
+	RdLine.Exec("ZREMRANGEBYSCORE", getServiceKey(), 0, Timer.OffsetUinx(F5ServiceTm*2))
 }
