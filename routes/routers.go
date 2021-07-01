@@ -35,8 +35,11 @@ func wsRouter(r *gin.Engine) {
 
 //路由
 func apiRouter(r *gin.Engine) {
-	r.MaxMultipartMemory = 8 << 20                // 限制上传文件最大8 MiB
-	r.GET("User/GetInfo", Controller.GetUserInfo) //获取用户信息
+	r.MaxMultipartMemory = 8 << 20                               // 限制上传文件最大8 MiB
+	r.GET("User/SendMsgALl", Controller.SendGlobalServMsg)       //发送全服信息
+	r.GET("User/SendUserMsg/:userId", Controller.SendUserMsg)    //给单个用户发送消息
+	r.GET("User/SendGroupMsg/:groupId", Controller.SendGroupMsg) //给单个用户发送消息
+	r.GET("User/GetInfo", Controller.GetUserInfo)                //获取用户信息
 	r.GET("ping", func(c *gin.Context) {
 		data := make(map[string]interface{})
 		data["test"] = "test1data"

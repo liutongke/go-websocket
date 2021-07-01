@@ -1,43 +1,76 @@
 package websocket
 
 import (
+	"encoding/json"
 	"fmt"
+	"go-websocket/app/services/BindCenter"
+	"go-websocket/app/services/grpcClient"
+	"net/http"
+	"strings"
 )
 
-//给对应群组发送消息
-func SendMsgToGroup() {
+//给所有用户发送消息
+func SendMsgALl(data map[string]interface{}) {
+	serviceList := BindCenter.GetAllService()
 
+	b, _ := json.Marshal(Response{
+		Err:  http.StatusOK,
+		Msg:  "SendMsgALl msg",
+		Data: data,
+	})
+
+	NewRpcService().SendMsgALlLocal(b) //本机的用户来一波
+
+	if len(serviceList) <= 0 {
+		fmt.Println("服务器ip空")
+		return
+	}
+
+	localAddr := BindCenter.GetServiceToStr()
+	for _, addr := range serviceList {
+		if strings.Compare(localAddr, addr) != 0 {
+			grpcClient.SendMsgALl(addr, b) //全服发送
+		}
+	}
+	return
 }
 
-//给所有用户发送消息
-func SendMsgToALl() {
+type RpcService struct {
+}
 
+func NewRpcService() *RpcService {
+	return &RpcService{}
+}
+
+//给本地所有用户发送消息
+func (r *RpcService) SendMsgALlLocal(data []byte) {
+	GetClientHub().Broadcast <- data
 }
 
 //给用户发送信息需要判断是否在本机
-func SendMsgToUser(toUserId int, data map[string]interface{}) {
-	//toClient := GetClientHub().GetClientByUserId(toUserId)
-	//b, _ := json.Marshal(Response{
-	//	Err:  http.StatusOK,
-	//	Msg:  "C2C friend msg",
-	//	Data: data,
-	//})
-	//if toClient != nil { //本机上发送
-	//	toClient.SendMsg(b)
-	//}
-	//
-	//bindInfo := Center.GetBindInfo(toUserId) //不在本机上则调用GRPC
-	//if bindInfo == (Center.BindUserInfo{}) {
-	//	//用户未登录
-	//	fmt.Println("用户未登录")
-	//	return
-	//}
-	//fmt.Println("开始调用grpc去发送消息")
-	//grpcClient.SendToUserMsg(bindInfo.RpcAddr, toUserId, b)
+func SendUserMsg(toUserId int, data map[string]interface{}) {
+	toClient := GetClientHub().GetClientByUserId(toUserId)
+	b, _ := json.Marshal(Response{
+		Err:  http.StatusOK,
+		Msg:  "C2C friend msg",
+		Data: data,
+	})
+	if toClient != nil { //本机上发送
+		toClient.SendMsg(b)
+	}
+
+	bindInfo := BindCenter.GetBindInfo(toUserId) //不在本机上则调用GRPC
+	if bindInfo == (BindCenter.BindUserInfo{}) {
+		//用户未登录
+		fmt.Println("用户未登录")
+		return
+	}
+	fmt.Println("开始调用grpc去发送消息")
+	grpcClient.SendUserMsg(bindInfo.RpcAddr, toUserId, b)
 }
 
 //发送给本机用户
-func SendToUserMsgLocal(toUserId int, data []byte) {
+func (r *RpcService) SendUserMsgLocal(toUserId int, data []byte) {
 	toClient := GetClientHub().GetClientByUserId(toUserId)
 	if toClient == nil { //本机上发送
 		fmt.Println("SendToUserMsgLocal跨区聊天了", "toClient", toClient)
@@ -52,11 +85,16 @@ func SendToGroupMsg(groupId int, data []byte) {
 }
 
 //给本地分组发送消息
-func SendToGroupMsgToLocal(groupId int, data []byte) {
+func (r *RpcService) SendToGroupMsgToLocal(groupId int, data []byte) {
 	toGroupClientList := GetClientHub().GetGroupClientList(groupId)
 	if len(toGroupClientList) <= 0 {
 		//分组不存在
 		return
 	}
 	GetClientHub().SendGroupMsg(toGroupClientList, data) //发送消息
+}
+
+//给对应群组发送消息
+func SendMsgToGroup() {
+
 }

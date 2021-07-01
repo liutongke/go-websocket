@@ -16,22 +16,28 @@ import (
 type server struct {
 }
 
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
-}
-
-func (s *server) SendToUserMsgToLocal(ctx context.Context, in *pb.SendToUserMsgToLocalRequest) (*pb.SendUserReply, error) {
+//给本机单个用户发送消息
+func (s *server) SendUserMsgToLocal(ctx context.Context, in *pb.SendUserMsgToLocalRequest) (*pb.SendUserReply, error) {
 	fmt.Println("服务端SendToUserMsgToLocal rpc调用成功")
 	fmt.Println(in.UserId, string(in.Data))
-	websocket.SendToUserMsgLocal(cast.ToInt(in.UserId), in.Data)
+	websocket.NewRpcService().SendUserMsgLocal(cast.ToInt(in.UserId), in.Data)
 	return &pb.SendUserReply{}, nil
 }
 
-func (s *server) SendToGroupMsgToLocal(ctx context.Context, in *pb.SendToGroupMsgToLocalRequest) (*pb.SendGroupReply, error) {
+//给本机分组用户发送消息
+func (s *server) SendGroupMsgToLocal(ctx context.Context, in *pb.SendGroupMsgToLocalRequest) (*pb.SendGroupReply, error) {
 	fmt.Println("服务端SendToGroupMsgToLocal rpc调用成功")
 	fmt.Println(in.GroupId, string(in.Data))
-	websocket.SendToGroupMsgToLocal(cast.ToInt(in.GroupId), in.Data)
+	websocket.NewRpcService().SendToGroupMsgToLocal(cast.ToInt(in.GroupId), in.Data)
 	return &pb.SendGroupReply{}, nil
+}
+
+//给全服用户发送消息
+func (s *server) SendAllMsgToLocal(ctx context.Context, in *pb.SendAllMsgToLocalRequest) (*pb.SendAllReply, error) {
+	fmt.Println("服务端SendAllMsgToLocal rpc调用成功")
+	fmt.Println(string(in.Data))
+	websocket.NewRpcService().SendMsgALlLocal(in.Data)
+	return &pb.SendAllReply{}, nil
 }
 
 func InitGrpcServer() {

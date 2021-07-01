@@ -5,14 +5,22 @@ package pb; // 包名
 option go_package = "./pb";
 // 定义一个打招呼服务
 service Greeter {
-  // SayHello 方法
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
-  rpc SendToUserMsgToLocal (SendToUserMsgToLocalRequest) returns (SendUserReply) {}
-  rpc SendToGroupMsgToLocal (SendToGroupMsgToLocalRequest) returns (SendGroupReply) {}
+  rpc SendUserMsgToLocal (SendUserMsgToLocalRequest) returns (SendUserReply) {}
+  rpc SendGroupMsgToLocal (SendGroupMsgToLocalRequest) returns (SendGroupReply) {}
+  rpc SendAllMsgToLocal (SendAllMsgToLocalRequest) returns (SendAllReply) {}
 }
 
-// 包含人名的一个请求消息
-message SendToUserMsgToLocalRequest {
+//给全服用户发送消息
+message SendAllMsgToLocalRequest{
+  bytes data = 1;
+}
+
+message SendAllReply{
+
+}
+
+// 给单个用户发送消息
+message SendUserMsgToLocalRequest {
   int64 userId = 1;
   bytes data = 2;
 }
@@ -21,22 +29,12 @@ message SendUserReply {
   //  string message = 1;
 }
 
-// 包含人名的一个请求消息
-message SendToGroupMsgToLocalRequest {
+// 给小组用户发送消息
+message SendGroupMsgToLocalRequest {
   int64 groupId = 1;
   bytes data = 2;
 }
 
 message SendGroupReply {
   //  string message = 1;
-}
-
-// 包含人名的一个请求消息
-message HelloRequest {
-  string name = 1;
-}
-
-//    包含问候语的响应消息
-message HelloReply {
-  string message = 1;
 }
