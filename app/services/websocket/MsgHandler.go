@@ -3,7 +3,6 @@ package websocket
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cast"
 	"go-websocket/utils"
@@ -98,8 +97,8 @@ func MsgHandle(c *Client, msgType int, msg []byte) {
 		v := f(c, string(msg))
 		v.Id = data.Id //消息的唯一的id
 		d, _ = json.Marshal(v)
-		if gin.IsDebugging() {
-			loginfo := "[GIN-ws] " + Timer.NowStr() + "-->userId: " + cast.ToString(c.UserId) + "-->Request data:" + string(msg) + "\n-->Response body: " + string(d)
+		if utils.IsDebug() {
+			loginfo := "[GIN-ws] " + Timer.NowStr() + "-->userId: " + cast.ToString(c.UserId) + "-->Request data:" + string(msg) + "\n\t-->Response body: " + string(d)
 			fmt.Println(loginfo)
 			Logger.Info(loginfo)
 		}

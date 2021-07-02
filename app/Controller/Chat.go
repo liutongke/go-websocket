@@ -1,9 +1,20 @@
 package Controller
 
 import (
+	"github.com/spf13/cast"
+	"github.com/tidwall/gjson"
 	"go-websocket/app/services/websocket"
 	"go-websocket/utils/wsresponse"
 )
+
+//创建本地分组 {"id":123,"path":"/CreateGroup","ver":"1.0.0","data":{"groupId":11}}
+func CreateGroup(c *websocket.Client, msg string) websocket.Response {
+	groupId := cast.ToInt(gjson.Get(msg, "data.groupId").Int())
+	websocket.GetClientHub().AddClient2Group(groupId, c)
+	var data = make(map[string]interface{})
+
+	return wsresponse.Success("CreateGroup", data)
+}
 
 //1对1聊天 {"id":123,"path":"/Chat/C2C","ver":"1.0.0","data":{"toUid":11,"toMsg":"你好啊"}}
 func C2C(c *websocket.Client, msg string) websocket.Response {

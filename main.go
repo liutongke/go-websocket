@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-websocket/app/services/grpcService"
+	"go-websocket/app/services/socket"
 	"go-websocket/app/services/task"
 	"go-websocket/config"
 	routers "go-websocket/routes"
@@ -29,11 +30,14 @@ func main() {
 
 //初始化配置
 func Init() {
+	p := socket.NewPool()
+	p.StartPool()
 	mkdir()             //启动项目时判断下文件夹
 	Logger.InitLogger() //初始化日志
 	routers.InitWsRouters()
 	validates.InitValidate()        //初始化参数验证
 	config.Init()                   //初始化配置文件
+	socket.StartTcp()               //启动tcp
 	go grpcService.InitGrpcServer() //启动grpc
 }
 

@@ -8,6 +8,7 @@ Port = "12223"
 RpcPort = "8972"#grpc通信的端口地址
 mode = 0 #1 启动websocket方式 0 启动http方式
 Cluster = false #true集群false非集群
+TcpPort = "20000"#tcp连接的端口
 #redis连接配置
 [Redis]
 Addr = "127.0.0.1:6379"   #数据库连接地址

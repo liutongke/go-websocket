@@ -21,6 +21,7 @@ type server struct {
 	RpcPort string
 	Mode    int
 	Cluster bool
+	TcpPort string
 }
 
 //redis连接配置

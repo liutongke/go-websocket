@@ -1,8 +1,6 @@
 package task
 
 import (
-	"fmt"
-	"go-websocket/utils/Timer"
 	"time"
 )
 
@@ -18,7 +16,7 @@ func PingTimer(f fun, param interface{}, d time.Duration) {
 			<-ticker.C //d执行一次
 			//发送心跳
 			f(param) //调用下函数
-			fmt.Println(fmt.Sprintf("%s 执行了一次定时任务", Timer.NowStr()))
+			//fmt.Println(fmt.Sprintf("%s 执行了一次定时任务", Timer.NowStr()))
 		}
 	}()
 }

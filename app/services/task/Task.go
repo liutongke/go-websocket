@@ -38,7 +38,7 @@ func initServiceCenter(param interface{}) {
 		}
 	}()
 
-	fmt.Println("定时任务，服务器注册中心", param)
+	//fmt.Println("定时任务，服务器注册中心", param)
 	bindCenter.SetService()
 
 	return
@@ -52,7 +52,7 @@ func delServiceCenter(param interface{}) {
 		}
 	}()
 
-	fmt.Println("定时任务，清理服务器注册中心", param)
+	//fmt.Println("定时任务，清理服务器注册中心", param)
 	bindCenter.DelTimeoutService()
 
 	return

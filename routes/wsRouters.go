@@ -10,6 +10,7 @@ import (
 func InitWsRouters() {
 	websocket.Register("/ping", Ping)
 	websocket.Register("/heartbeat", Controller.Heartbeat)
+	websocket.Register("/CreateGroup", Controller.CreateGroup)
 }
 
 //获取信息 {"id":123,"path":"/ping","ver":"1.0.0","data":""}
