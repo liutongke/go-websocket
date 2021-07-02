@@ -80,21 +80,40 @@ func (r *RpcService) SendUserMsgLocal(toUserId int, data []byte) {
 }
 
 //给分组发送消息
-func SendToGroupMsg(groupId int, data []byte) {
-	//获取所有的激活rpc
+func SendMsgToGroup(groupId int, data map[string]interface{}) {
+	groupClientList := GetClientHub().GetGroupClientList(groupId)
+	
+	b, _ := json.Marshal(Response{
+		Err:  http.StatusOK,
+		Msg:  "SendGroupMsg msg",
+		Data: data,
+	})
+
+	if len(groupClientList) > 0 { //本机上发送
+		GetClientHub().SendGroupMsg(groupClientList, b)
+	}
+
+	serviceList := bindCenter.GetAllService()
+
+	if len(serviceList) <= 0 {
+		fmt.Println("服务器ip空")
+		return
+	}
+
+	localAddr := bindCenter.GetServiceToStr()
+	for _, addr := range serviceList {
+		if strings.Compare(localAddr, addr) != 0 {
+			grpcClient.SendGroupMsgToLocal(addr, groupId, b) //给对应的群发送消息
+		}
+	}
 }
 
 //给本地分组发送消息
 func (r *RpcService) SendToGroupMsgToLocal(groupId int, data []byte) {
 	toGroupClientList := GetClientHub().GetGroupClientList(groupId)
 	if len(toGroupClientList) <= 0 {
-		//分组不存在
+		fmt.Println("群不存在") //分组不存在
 		return
 	}
 	GetClientHub().SendGroupMsg(toGroupClientList, data) //发送消息
-}
-
-//给对应群组发送消息
-func SendMsgToGroup() {
-
 }
