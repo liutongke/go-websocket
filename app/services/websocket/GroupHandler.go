@@ -8,14 +8,14 @@ func (h *Hub) GetGroupClientList(groupId int) []*Client {
 }
 
 // 添加到本地分组
-func (h *Hub) addClient2Group(groupId int, client *Client) {
+func (h *Hub) AddClient2Group(groupId int, client *Client) {
 	h.GroupLock.Lock()
 	defer h.GroupLock.Unlock()
 	h.Groups[groupId] = append(h.Groups[groupId], client)
 }
 
 // 删除分组里的客户端
-func (h *Hub) delGroupClient(groupId int, client *Client) {
+func (h *Hub) DelGroupClient(groupId int, client *Client) {
 	h.GroupLock.Lock()
 	defer h.GroupLock.Unlock()
 

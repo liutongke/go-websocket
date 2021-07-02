@@ -44,8 +44,8 @@ func SendGroupMsg(c *gin.Context) {
 	data := make(map[string]interface{})
 	data["tm"] = time.Now().Format("2006-01-02 15:04:05")
 	data["uuid"] = uuid.NewString()
-	userId := cast.ToInt(c.Param("userId"))
-	websocket.SendUserMsg(userId, data)
+	groupId := cast.ToInt(c.Param("groupId"))
+	websocket.SendMsgToGroup(groupId, data)
 	c.JSON(http.StatusOK, gin.H{
 		"err":  http.StatusOK,
 		"msg":  "SendGroupMsg success",
