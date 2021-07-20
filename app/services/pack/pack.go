@@ -9,11 +9,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-type Msg struct {
-	MsgId int
-	Err   int
-	Data  interface{}
-}
+
 
 //获取信息头的长度
 func GetHeadLen() int {
