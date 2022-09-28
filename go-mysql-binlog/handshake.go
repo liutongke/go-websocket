@@ -6,15 +6,13 @@ import (
 	"fmt"
 )
 
+// 4a0000000a352e372e3236000c0000002075546b780e273500fff7c00200ff8115000000000000000000004971082517414a186634754b006d7973716c5f6e61746976655f70617373776f726400
 func Handshakes() {
 	hexStringData := "0a352e372e3236000c0000002075546b780e273500fff7c00200ff8115000000000000000000004971082517414a186634754b006d7973716c5f6e61746976655f70617373776f726400"
 	packet, _ := hex.DecodeString(hexStringData)
-	fmt.Println(packet)
 
-	//idx := 0
-	protocolPacket := []byte{00}
-	copy(protocolPacket, packet)
-	protocolPacket = append(protocolPacket, 00)
+	protocolPacket := []byte{00, 00}
+	copy(protocolPacket, packet[0:1])
 	protocolVersion = binary.LittleEndian.Uint16(protocolPacket)
 	fmt.Printf("protocolVersion:%d\n", protocolVersion)
 
@@ -34,7 +32,7 @@ next:
 	fmt.Printf("threadId:%d\n", binary.LittleEndian.Uint32(packet[idx:idx+4]))
 
 	fmt.Printf("salt:%s\n", string(packet[idx+4:idx+4+8]))
-	fmt.Println(packet)
+	fmt.Println("salt1 len:", len(packet[idx+4:idx+4+8]))
 	fmt.Printf("serverCapabilities:%d\n", binary.LittleEndian.Uint16(packet[idx+4+8+1:idx+4+8+1+2]))
 
 	languagePacket := []byte{00, 00}
@@ -60,6 +58,7 @@ next:
 	}
 
 salt2jump:
+	fmt.Println("salt2 len:", len(salt2))
 	fmt.Printf("salt2:%s\n", string(salt2))
 	fmt.Printf("Authentication Plugin:%s\n", string(packet[idx+4+8+1+2+1+2+2+1+10+len(salt2):]))
 	//fmt.Println("Iq\b%\u0017AJ\u0018f4uK")
@@ -80,10 +79,6 @@ var (
 )
 
 func main() {
-	t := "15"
-	p, _ := hex.DecodeString(t)
-	fmt.Println(p)
-	fmt.Println("++++++++++++++")
 	//fmt.Printf("serverCapabilities:%d\n", binary.LittleEndian.Uint16(p))
 	Handshakes()
 	//header := []byte{74, 74, 0, 0}
