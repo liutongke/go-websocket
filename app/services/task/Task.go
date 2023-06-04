@@ -2,12 +2,12 @@ package task
 
 import (
 	"fmt"
-	"go-websocket/app/services/BindCenter"
+	"go-websocket/app/services/bindCenter"
 	"runtime/debug"
 	"time"
 )
 
-//开始任务
+// 开始任务
 func StartTask() {
 	//var d = 5 * time.Second
 	PingTimer(cleanConnection, "", 300*time.Second)
@@ -30,7 +30,7 @@ func cleanConnection(param interface{}) {
 	return
 }
 
-//服务中心注册
+// 服务中心注册
 func initServiceCenter(param interface{}) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -44,7 +44,7 @@ func initServiceCenter(param interface{}) {
 	return
 }
 
-//清理超时的服务中心
+// 清理超时的服务中心
 func delServiceCenter(param interface{}) {
 	defer func() {
 		if r := recover(); r != nil {

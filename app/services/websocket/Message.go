@@ -3,13 +3,13 @@ package websocket
 import (
 	"encoding/json"
 	"fmt"
-	"go-websocket/app/services/BindCenter"
+	"go-websocket/app/services/bindCenter"
 	"go-websocket/app/services/grpcClient"
 	"net/http"
 	"strings"
 )
 
-//给所有用户发送消息
+// 给所有用户发送消息
 func SendMsgALl(data map[string]interface{}) {
 	serviceList := bindCenter.GetAllService()
 
@@ -42,12 +42,12 @@ func NewRpcService() *RpcService {
 	return &RpcService{}
 }
 
-//给本地所有用户发送消息
+// 给本地所有用户发送消息
 func (r *RpcService) SendMsgALlLocal(data []byte) {
 	GetClientHub().Broadcast <- data
 }
 
-//给用户发送信息需要判断是否在本机
+// 给用户发送信息需要判断是否在本机
 func SendUserMsg(toUserId int, data map[string]interface{}) {
 	toClient := GetClientHub().GetClientByUserId(toUserId)
 	b, _ := json.Marshal(Response{
@@ -69,7 +69,7 @@ func SendUserMsg(toUserId int, data map[string]interface{}) {
 	grpcClient.SendUserMsg(bindInfo.RpcAddr, toUserId, b)
 }
 
-//发送给本机用户
+// 发送给本机用户
 func (r *RpcService) SendUserMsgLocal(toUserId int, data []byte) {
 	toClient := GetClientHub().GetClientByUserId(toUserId)
 	if toClient == nil { //本机上发送
@@ -79,10 +79,10 @@ func (r *RpcService) SendUserMsgLocal(toUserId int, data []byte) {
 	toClient.SendMsg(data)
 }
 
-//给分组发送消息
+// 给分组发送消息
 func SendMsgToGroup(groupId int, data map[string]interface{}) {
 	groupClientList := GetClientHub().GetGroupClientList(groupId)
-	
+
 	b, _ := json.Marshal(Response{
 		Err:  http.StatusOK,
 		Msg:  "SendGroupMsg msg",
@@ -108,7 +108,7 @@ func SendMsgToGroup(groupId int, data map[string]interface{}) {
 	}
 }
 
-//给本地分组发送消息
+// 给本地分组发送消息
 func (r *RpcService) SendToGroupMsgToLocal(groupId int, data []byte) {
 	toGroupClientList := GetClientHub().GetGroupClientList(groupId)
 	if len(toGroupClientList) <= 0 {

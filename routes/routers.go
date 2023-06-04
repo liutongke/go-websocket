@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	middleware2 "go-websocket/app/middleware"
+	"go-websocket/app/Middleware"
 	"go-websocket/app/services/websocket"
 	"go-websocket/config"
 	"go-websocket/utils"
@@ -31,7 +31,7 @@ func wsRouter(r *gin.Engine) {
 
 // 中间件
 func middleware(r *gin.Engine) {
-	r.Use(middleware2.GinBodyLogMiddleware) //打印日志
-	r.Use(middleware2.Cors())               //开启中间件 允许使用跨域请求
-	r.Use(middleware2.Recovers())           //捕获错误
+	r.Use(Middleware.GinBodyLogMiddleware) //打印日志
+	r.Use(Middleware.Cors())               //开启中间件 允许使用跨域请求
+	r.Use(Middleware.Recovers())           //捕获错误
 }

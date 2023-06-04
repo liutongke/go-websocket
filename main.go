@@ -7,7 +7,7 @@ import (
 	"go-websocket/app/services/task"
 	"go-websocket/config"
 	routers "go-websocket/routes"
-	services "go-websocket/utils"
+	"go-websocket/utils"
 	"go-websocket/utils/Dir"
 	"go-websocket/utils/Logger"
 	"go-websocket/utils/Timer"
@@ -23,12 +23,12 @@ func main() {
 	task.StartTask() //开启异步定时任务
 	formatNow := time.Now().Format("2006-01-02 15:04:05")
 	fmt.Println(fmt.Sprintf("服务器时间：%s,北京时间：%s", formatNow, Timer.NowStr()))
-	fmt.Println(fmt.Sprintf("本机IP地址GetServIp方式获得：%s；GetLocalIp方式获得：%s", services.GetServIp(), services.GetLocalIp()))
+	fmt.Println(fmt.Sprintf("本机IP地址GetServIp方式获得：%s；GetLocalIp方式获得：%s", utils.GetServIp(), utils.GetLocalIp()))
 	fmt.Println(fmt.Sprintf("开启的RPC端口：%s", config.GetConfClient().Server.RpcPort))
 	r.Run(":" + config.GetConfClient().Server.Port) // listen and serve on 0.0.0.0:8080
 }
 
-//初始化配置
+// 初始化配置
 func Init() {
 	p := socket.NewPool()
 	p.StartPool()
@@ -41,7 +41,7 @@ func Init() {
 	go grpcService.InitGrpcServer() //启动grpc
 }
 
-//启动创建文件夹
+// 启动创建文件夹
 func mkdir() {
 	list := [...]string{"runtime", "config"}
 	for _, v := range list {
