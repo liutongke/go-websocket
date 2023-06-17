@@ -3,6 +3,8 @@ package task
 import (
 	"fmt"
 	"go-websocket/app/services/bindCenter"
+	"go-websocket/app/services/websocket"
+	"go-websocket/config"
 	"runtime/debug"
 	"time"
 )
@@ -24,8 +26,10 @@ func cleanConnection(param interface{}) {
 		}
 	}()
 
-	fmt.Println("定时任务，清理超时连接", param)
-	//websocket.ClearTimeoutConnections()
+	if config.GetConfClient().WebSocket.CleanConnection {
+		fmt.Println("定时任务，清理超时连接", param)
+		websocket.ClearTimeoutConnections()
+	}
 
 	return
 }
@@ -38,8 +42,10 @@ func initServiceCenter(param interface{}) {
 		}
 	}()
 
-	//fmt.Println("定时任务，服务器注册中心", param)
-	bindCenter.SetService()
+	if config.GetConfClient().CommonConf.IsOpenRpc {
+		//fmt.Println("定时任务，服务器注册中心", param)
+		bindCenter.SetService()
+	}
 
 	return
 }
@@ -51,9 +57,9 @@ func delServiceCenter(param interface{}) {
 			fmt.Println("清理服务器注册中心失败", r, string(debug.Stack()))
 		}
 	}()
-
-	//fmt.Println("定时任务，清理服务器注册中心", param)
-	bindCenter.DelTimeoutService()
-
+	if config.GetConfClient().CommonConf.IsOpenRpc {
+		//fmt.Println("定时任务，清理服务器注册中心", param)
+		bindCenter.DelTimeoutService()
+	}
 	return
 }

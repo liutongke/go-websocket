@@ -2,8 +2,8 @@ package Controller
 
 import (
 	"go-websocket/app/services/websocket"
-	"go-websocket/utils/Timer"
-	"go-websocket/utils/wsresponse"
+	"go-websocket/tools/Timer"
+	"go-websocket/tools/wsresponse"
 	"time"
 )
 
@@ -22,6 +22,6 @@ func Heartbeat(c *websocket.Client, msg string) websocket.Response {
 	c.Heartbeat(currentTime)
 	data := make(map[string]interface{})
 	data["tm"] = currentTime
-	data["strTm"] = Timer.NowStr()
+	data["strTm"] = Timer.GetNowStr()
 	return wsresponse.Success("心跳biubiubiu---", data)
 }

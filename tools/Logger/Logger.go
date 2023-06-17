@@ -3,8 +3,8 @@ package Logger
 import (
 	"bufio"
 	"fmt"
-	"go-websocket/utils/Dir"
-	"go-websocket/utils/Timer"
+	"go-websocket/tools/Dir"
+	"go-websocket/tools/Timer"
 	"os"
 	"runtime"
 )
@@ -40,13 +40,14 @@ func (l *Logger) runLogs() {
 	}
 }
 
-//写入日志信息2021-01-08 12:09:22|DEBUG|REQ:App.Auth.Index|
+// 写入日志信息2021-01-08 12:09:22|DEBUG|REQ:App.Auth.Index|
 func (fl *Logger) log(saveName string, Level string) {
 	isDebug := false
 	if isDebug { //判断是否是线下开发模式
 		return
 	}
-	file, err := os.OpenFile(Dir.GetAbsolutePath("/runtime/"+saveName+"_"+Timer.DateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+
+	file, err := os.OpenFile(Dir.GetAbsDirPath("/runtime/"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("open file failed, err:", err)
 		return
@@ -59,7 +60,7 @@ func (fl *Logger) log(saveName string, Level string) {
 	writer.Flush()
 }
 
-//skip相对当前代码的调用层级 获取运行的行号、文件名称、调用的函数名称
+// skip相对当前代码的调用层级 获取运行的行号、文件名称、调用的函数名称
 func getRunInfo(skip int) (fileName string, file string, line int) {
 	funcName, file, line, ok := runtime.Caller(skip)
 	if ok {

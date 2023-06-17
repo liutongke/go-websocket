@@ -1,4 +1,4 @@
-package utils
+package tools
 
 import (
 	"crypto/md5"
@@ -6,8 +6,8 @@ import (
 	"io"
 )
 
-//php数组转go
-//返回数组中所有的值
+// php数组转go
+// 返回数组中所有的值
 func Array_values(elements map[interface{}]interface{}) []interface{} {
 	i, vals := 0, make([]interface{}, len(elements))
 	for _, val := range elements {
@@ -17,7 +17,7 @@ func Array_values(elements map[interface{}]interface{}) []interface{} {
 	return vals
 }
 
-//值是否在某个数组中
+// 值是否在某个数组中
 func In_array(needle interface{}, hystack interface{}) bool {
 	switch key := needle.(type) {
 	case string:
@@ -44,7 +44,7 @@ func In_array(needle interface{}, hystack interface{}) bool {
 	return false
 }
 
-//md5取值
+// md5取值
 func Md5(str string) string {
 	h := md5.New()
 	io.WriteString(h, str)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"go-websocket/utils/Jwt"
+	"go-websocket/tools/jwt"
 	"net/http"
 	"time"
 )
@@ -37,12 +37,12 @@ func NewClient(Hub *Hub, userId int, openId string, ws *websocket.Conn, firstTim
 	return client
 }
 
-//启动websocket
+// 启动websocket
 func (hub *Hub) StartWs(ctx *gin.Context) {
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			return true
-		},                                                               //跨域true忽略
+		}, //跨域true忽略
 		Subprotocols: []string{ctx.GetHeader("Sec-WebSocket-Protocol")}, // 处理 Sec-WebSocket-Protocol Header
 	}
 	upgradeHeader := http.Header{}
@@ -58,8 +58,10 @@ func (hub *Hub) StartWs(ctx *gin.Context) {
 		fmt.Println("建立websocket连接失败:", err)
 		return
 	}
-	token := ctx.Param("token")
-	e, Claims := Jwt.Verify(token)
+	//token := ctx.Param("token")
+	token := ctx.GetHeader("X-Token")
+
+	Claims, e := jwt.Verify(token)
 	if !e {
 		b, _ := json.Marshal(Response{
 			Id:   -1,
@@ -72,7 +74,7 @@ func (hub *Hub) StartWs(ctx *gin.Context) {
 		return
 	}
 
-	client := NewClient(hub, Claims.UserId, Claims.Openid, conn, uint64(time.Now().Unix()))
+	client := NewClient(hub, Claims.Uid, Claims.Openid, conn, uint64(time.Now().Unix()))
 	client.Hub.Register <- client
 
 	go client.writePump() //发送客户端信息

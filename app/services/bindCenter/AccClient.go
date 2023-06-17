@@ -3,8 +3,8 @@ package bindCenter
 import (
 	"encoding/json"
 	"go-websocket/config"
-	"go-websocket/utils"
-	"go-websocket/utils/RdLine"
+	"go-websocket/tools/RdLine"
+	"go-websocket/tools/Tools"
 )
 
 const keys = "uBindServ"
@@ -14,7 +14,7 @@ type BindUserInfo struct {
 	UserId  int    // 用户Id，用户登录以后才有
 }
 
-//获取用户的绑定信息
+// 获取用户的绑定信息
 func GetBindInfo(userId int) BindUserInfo {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()
@@ -27,10 +27,10 @@ func GetBindInfo(userId int) BindUserInfo {
 	return bindUserInfo
 }
 
-//将用户与应用服务器地址绑定
+// 将用户与应用服务器地址绑定
 func BindUidAndService(userId int) bool {
 	b, err := json.Marshal(BindUserInfo{
-		RpcAddr: utils.GetLocalIp() + ":" + config.GetConfClient().Server.RpcPort,
+		RpcAddr: Tools.GetLocalIp() + ":" + config.GetConfClient().Server.RpcPort,
 		UserId:  userId,
 	})
 	if err == nil {
@@ -42,7 +42,7 @@ func BindUidAndService(userId int) bool {
 	return false
 }
 
-//退出登录的时候删掉防止占用内容太大
+// 退出登录的时候删掉防止占用内容太大
 func DelBindUidAndService(userId int) {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()

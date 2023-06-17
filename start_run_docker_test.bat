@@ -23,4 +23,4 @@ if exist "%data_dir_log%" (
 
 docker build -t go-websocket:v1 .
 
-docker run -itd --name go-websocket-v1 -p 12223:12223 -p 8972:8972 -v %folder%:/var/www/html/runtime -v %data_dir_log%:/var/www/html/log go-websocket:v1
+docker run -it --name go-websocket-v1 -p 12223:12223 -p 8972:8972 -v %current_dir%:/var/www/html go-websocket:v1

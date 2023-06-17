@@ -1,33 +1,39 @@
-package Jwt
+package jwt
 
 import (
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 
-//指定加密密钥
-var jwtSecret = []byte("N<7orG't|i0j4H6pxJP^_Q.&$(:a[lf2vS]cCOEAZn%3V#TdB1!IhW)*M@k0egL8-U,z+w?/`}y5uXq>F~=;RbY9sm{DKad-zAg")
+// 指定加密密钥
+var jwtSecret = []byte("D65GQbemixhAcu4gKsMzZRdHl8pO0BU2fPVEI7wFJknCyWLrY9ovjST3atXq1NfscETSuEl5YUzMjkb0HBnsFbInneMVyj0JEHF")
 
-//Claim是一些实体（通常指的用户）的状态和额外的元数据
+// Claim是一些实体（通常指的用户）的状态和额外的元数据
 type Claims struct {
-	//appName string `json:"appName"`
-	//appid   string `json:"appid"`
-	//module  string `json:"module"`
-	//ver     string `json:"ver"`
-	Openid string `json:"openid"`
-	UserId int    `json:"userId"`
+	AppName string `json:"appName"`
+	Appid   string `json:"appid"`
+	Module  string `json:"module"`
+	Ver     string `json:"ver"`
+	Openid  string `json:"openid"`
+	Uid     int    `json:"uid"`
 	jwt.StandardClaims
 }
 
 // 根据用户的信息生成token
-func GenerateToken(userId int, openId string) (string, error) {
-	expireTime := time.Now().Add(168 * time.Hour) //设置token有效时间
+func GenerateToken(AppName, appid, module, ver, openid string, uid int) (string, error) {
+	//设置token有效时间
+	nowTime := time.Now()
+	expireTime := nowTime.Add(3 * time.Hour)
 	claims := Claims{
-		UserId: userId,
-		Openid: openId,
+		AppName: AppName,
+		Appid:   appid,
+		Module:  module,
+		Ver:     ver,
+		Openid:  openid,
+		Uid:     uid,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(), // 过期时间
-			Issuer:    "go-websocket",    // 指定token发行人
+			Issuer:    "nat-x",           // 指定token发行人
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -52,29 +58,13 @@ func ParseToken(token string) (*Claims, error) {
 
 }
 
-func Verify(token string) (bool, *Claims) {
-	var (
-		code int64
-		c    *Claims
-		err  error
-	)
+func Verify(token string) (*Claims, bool) {
 	if token == "" {
-		code = 400
-	} else {
-		c, err = ParseToken(token)
-		if err != nil {
-			code = 400
-		} else if time.Now().Unix() > c.ExpiresAt {
-			code = 400
-		}
+		return nil, false
 	}
-	//如果token验证不通过，直接终止程序，c.Abort()
-	if code != 0 {
-		// 返回错误信息
-		//fmt.Println("token error")
-		//终止程序
-		return false, c
+	claims, err := ParseToken(token)
+	if err != nil || time.Now().Unix() > claims.ExpiresAt {
+		return claims, false
 	}
-	//fmt.Println("token succ")
-	return true, c
+	return claims, true
 }

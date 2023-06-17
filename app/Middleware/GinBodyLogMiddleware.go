@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go-websocket/utils/Logger"
-	"go-websocket/utils/Timer"
+	"go-websocket/tools/Logger"
+	"go-websocket/tools/Timer"
 )
 
-//打印返回信息
+// 打印返回信息
 type bodyLogWriter struct {
 	gin.ResponseWriter
 	body *bytes.Buffer
@@ -24,7 +24,7 @@ func GinBodyLogMiddleware(c *gin.Context) {
 	c.Writer = blw
 	c.Next()
 	if gin.IsDebugging() {
-		debugInfo := "[GIN-HTTP] " + Timer.NowStr() + " -->Request path:" + c.Request.URL.Path + "\n-->Response body: " + blw.body.String()
+		debugInfo := "[GIN-HTTP] " + Timer.GetNowStr() + " -->Request path:" + c.Request.URL.Path + "\n-->Response body: " + blw.body.String()
 		fmt.Println(debugInfo)
 		Logger.Info(debugInfo)
 	}

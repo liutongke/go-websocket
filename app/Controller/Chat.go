@@ -4,10 +4,10 @@ import (
 	"github.com/spf13/cast"
 	"github.com/tidwall/gjson"
 	"go-websocket/app/services/websocket"
-	"go-websocket/utils/wsresponse"
+	"go-websocket/tools/wsresponse"
 )
 
-//创建本地分组 {"id":123,"path":"/CreateGroup","ver":"1.0.0","data":{"groupId":11}}
+// 创建本地分组 {"id":123,"path":"/CreateGroup","ver":"1.0.0","data":{"groupId":11}}
 func CreateGroup(c *websocket.Client, msg string) websocket.Response {
 	groupId := cast.ToInt(gjson.Get(msg, "data.groupId").Int())
 	websocket.GetClientHub().AddClient2Group(groupId, c)
@@ -16,7 +16,7 @@ func CreateGroup(c *websocket.Client, msg string) websocket.Response {
 	return wsresponse.Success("CreateGroup", data)
 }
 
-//1对1聊天 {"id":123,"path":"/Chat/C2C","ver":"1.0.0","data":{"toUid":11,"toMsg":"你好啊"}}
+// 1对1聊天 {"id":123,"path":"/Chat/C2C","ver":"1.0.0","data":{"toUid":11,"toMsg":"你好啊"}}
 func C2C(c *websocket.Client, msg string) websocket.Response {
 	//toUid := cast.ToInt(gjson.Get(msg, "data.toUid").Int()) //接收方的标识2
 	//toMsg := gjson.Get(msg, "data.toMsg").String()

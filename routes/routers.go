@@ -5,13 +5,13 @@ import (
 	"go-websocket/app/Middleware"
 	"go-websocket/app/services/websocket"
 	"go-websocket/config"
-	"go-websocket/utils"
+	"go-websocket/tools/Tools"
 )
 
 // SetupRouter 配置路由信息
 func SetupRouter() *gin.Engine {
 	var r *gin.Engine
-	if utils.IsDebug() { //开发模式
+	if Tools.IsDebug() { //开发模式
 		r = gin.Default()
 	} else { //生产模式
 		gin.SetMode(gin.ReleaseMode)
@@ -25,7 +25,7 @@ func SetupRouter() *gin.Engine {
 
 func wsRouter(r *gin.Engine) {
 	if config.GetConfClient().CommonConf.IsOpenWebsocket { //是否开启websocket                                    //websocket连接
-		r.GET("/ws/:token", websocket.StartClientHub().StartWs)
+		r.GET("/ws", websocket.StartClientHub().StartWs)
 	}
 }
 

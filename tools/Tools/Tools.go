@@ -1,9 +1,10 @@
-package utils
+package Tools
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"go-websocket/utils/Dir"
+	Dir "go-websocket/tools/Dir"
 	"io/ioutil"
 	"math/rand"
 	"net"
@@ -14,7 +15,16 @@ import (
 	"time"
 )
 
-//获取本机IP地址
+// GetRequestIP 获取客户端ip
+func GetRequestIP(c *gin.Context) string {
+	reqIP := c.ClientIP()
+	if reqIP == "::1" {
+		reqIP = "127.0.0.1"
+	}
+	return reqIP
+}
+
+// 获取本机IP地址
 func GetLocalIp() string {
 	ip, err := GetOutBoundIP()
 	if err != nil {
@@ -35,7 +45,7 @@ func GetOutBoundIP() (ip string, err error) {
 	return
 }
 
-//获取服务器地址
+// 获取服务器地址
 func GetServIp() string {
 	ip, err := externalIP()
 	if err != nil {
@@ -90,7 +100,7 @@ func getIpFromAddr(addr net.Addr) net.IP {
 	return ip
 }
 
-//生成count个[start,end)结束的不重复的随机数
+// 生成count个[start,end)结束的不重复的随机数
 func GenerateRandomNumber(start int, end int, count int) []int {
 	//范围检查
 	if end < start || (end-start) < count {
@@ -158,7 +168,7 @@ func GenerateRandomNumber(start int, end int, count int) []int {
 //return strList
 //}
 
-//获取文件后缀
+// 获取文件后缀
 func GetImgExt(headerByte []byte) (ext string) {
 	xStr := fmt.Sprintf("%x", headerByte)
 	switch {
@@ -190,11 +200,10 @@ func GetImgExt(headerByte []byte) (ext string) {
 	return ext
 }
 
-//通过url获取字节流
+// 通过url获取字节流
 func GetUrlToByte(url string) ([]byte, error) {
 	method := "GET"
-	client := &http.Client{
-	}
+	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return nil, err
@@ -211,7 +220,7 @@ func GetUrlToByte(url string) ([]byte, error) {
 	return body, nil
 }
 
-//获取map所有的值
+// 获取map所有的值
 func ArrayKeys(elements map[string]int) []interface{} {
 	i, keys := 0, make([]interface{}, len(elements))
 	for key, _ := range elements {
@@ -221,10 +230,11 @@ func ArrayKeys(elements map[string]int) []interface{} {
 	return keys
 }
 
-/**
+/*
+*
 @保存图片到指定文件夹
 @file 要保存的文件字节流
-@dir 文件将要保存的文件夹
+@Dir 文件将要保存的文件夹
 return 文件名称
 return 文件的sid，唯一值
 */
@@ -243,7 +253,7 @@ func SaveImg(file []byte, dir string) (string, string) {
 	return uuidName + suffixName, uuid.NewString()
 }
 
-//初始化创建配置文件
+// 初始化创建配置文件
 func InitMkdir(dir string) string {
 	dirPath, _ := os.Getwd()
 	savePath := dirPath + "/" + dir
@@ -255,7 +265,7 @@ func InitMkdir(dir string) string {
 	return ""
 }
 
-//true开发模式，false生产模式
+// true开发模式，false生产模式
 func IsDebug() bool {
 	sysType := runtime.GOOS
 	if sysType == "linux" {
@@ -267,12 +277,12 @@ func IsDebug() bool {
 	return false
 }
 
-//过期时间
+// 过期时间
 func Ttl(t int) time.Duration {
 	return time.Second * time.Duration(t)
 }
 
-//打印
+// 打印
 func DD(msg ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	fmt.Println(file, line, "=====>")
@@ -281,9 +291,9 @@ func DD(msg ...interface{}) {
 	}
 }
 
-//读取配表
+// 读取配表
 func ReadConfTb(name string, ver string) []byte {
-	filePath := Dir.GetAbsolutePath("/bs/v1/tb/" + name) // 打开json文件
+	filePath := Dir.GetAbsDirPath("./bs/v1/tb/" + name) // 打开json文件
 	jsonFile, err := os.Open(filePath)
 	if err != nil {
 		return nil

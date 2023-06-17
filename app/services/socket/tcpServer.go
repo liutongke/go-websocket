@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"go-websocket/config"
-	"go-websocket/utils/Timer"
+	"go-websocket/tools/Timer"
 	"net"
+	"strconv"
 )
 
-//开始tcp连接
+// 开始tcp连接
 func StartTcp() {
 	go func() {
 		listen, err := net.Listen("tcp", "127.0.0.1:"+config.GetConfClient().Server.TcpPort)
@@ -22,14 +23,14 @@ func StartTcp() {
 				fmt.Println(fmt.Sprintf("accept failed, err:%v", err))
 				continue
 			}
-			client := NewTcpClient(1, "1", conn, uint64(Timer.NowUnix()))
+			client := NewTcpClient(1, "1", conn, uint64(Timer.GetNowUnix()))
 			go client.writePump() //发送客户端信息
 			go client.readPump()  //读取客户端信息
 		}
 	}()
 }
 
-//写入消息
+// 写入消息
 func (t *TcpClient) writePump() {
 	for {
 		select {
@@ -44,7 +45,7 @@ func (t *TcpClient) SendMsg(data []byte) {
 	t.Conn.Write(data)
 }
 
-//读取消息
+// 读取消息
 func (t *TcpClient) readPump() {
 	for {
 		reader := bufio.NewReader(t.Conn)
@@ -56,7 +57,7 @@ func (t *TcpClient) readPump() {
 		}
 		recvStr := string(buf[:n])
 		fmt.Println("收到client端发来的数据：", recvStr)
-		t.Send <- []byte("服务器收到了你的消息了" + Timer.NowStr())
+		t.Send <- []byte("服务器收到了你的消息了" + strconv.FormatInt(Timer.GetNowUnix(), 10))
 	}
 }
 

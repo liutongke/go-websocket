@@ -16,7 +16,7 @@ import (
 type server struct {
 }
 
-//给本机单个用户发送消息
+// 给本机单个用户发送消息
 func (s *server) SendUserMsgToLocal(ctx context.Context, in *pb.SendUserMsgToLocalRequest) (*pb.SendUserReply, error) {
 	fmt.Println("服务端SendToUserMsgToLocal rpc调用成功")
 	fmt.Println(in.UserId, string(in.Data))
@@ -24,7 +24,7 @@ func (s *server) SendUserMsgToLocal(ctx context.Context, in *pb.SendUserMsgToLoc
 	return &pb.SendUserReply{}, nil
 }
 
-//给本机分组用户发送消息
+// 给本机分组用户发送消息
 func (s *server) SendGroupMsgToLocal(ctx context.Context, in *pb.SendGroupMsgToLocalRequest) (*pb.SendGroupReply, error) {
 	fmt.Println("服务端SendToGroupMsgToLocal rpc调用成功")
 	fmt.Println(in.GroupId, string(in.Data))
@@ -32,7 +32,7 @@ func (s *server) SendGroupMsgToLocal(ctx context.Context, in *pb.SendGroupMsgToL
 	return &pb.SendGroupReply{}, nil
 }
 
-//给全服用户发送消息
+// 给全服用户发送消息
 func (s *server) SendAllMsgToLocal(ctx context.Context, in *pb.SendAllMsgToLocalRequest) (*pb.SendAllReply, error) {
 	fmt.Println("服务端SendAllMsgToLocal rpc调用成功")
 	fmt.Println(string(in.Data))
@@ -57,4 +57,5 @@ func InitGrpcServer() {
 		panic(fmt.Sprintf("failed to serve: %v", err))
 		return
 	}
+	fmt.Printf("开启的RPC端口：%s \n", config.GetConfClient().Server.RpcPort)
 }

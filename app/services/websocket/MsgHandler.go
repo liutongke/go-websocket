@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cast"
-	"go-websocket/utils"
-	"go-websocket/utils/Logger"
-	"go-websocket/utils/Timer"
+	"go-websocket/tools/Logger"
+	"go-websocket/tools/Timer"
+	"go-websocket/tools/Tools"
 	"net/http"
 	"reflect"
 	"runtime"
@@ -32,7 +32,7 @@ func Register(key string, value DisposeFunc) {
 	handlersRWMutex.Lock()
 	defer handlersRWMutex.Unlock()
 	handlers[key] = value
-	if utils.IsDebug() {
+	if Tools.IsDebug() {
 		fmt.Println("[GIN-debug] ws  " + key + "-->" + GetFunctionName(value))
 	}
 	return
@@ -47,7 +47,7 @@ func GetHandlers(key string) (value DisposeFunc, ok bool) {
 	return
 }
 
-//请求的结构体
+// 请求的结构体
 type Request struct {
 	Id   int         `json:"id"`   //消息id
 	Ver  string      `json:"ver"`  //版本号
@@ -55,7 +55,7 @@ type Request struct {
 	Data interface{} `json:"data"` // 数据 json
 }
 
-//返回的结构体
+// 返回的结构体
 type Response struct {
 	Id   int         `json:"id"`   //消息id
 	Err  int         `json:"err"`  // 返回的错误码
@@ -63,7 +63,7 @@ type Response struct {
 	Data interface{} `json:"data"` // 返回数据json
 }
 
-//统一处理下信息
+// 统一处理下信息
 func MsgHandle(c *Client, msgType int, msg []byte) {
 	data := Request{}
 	err := json.Unmarshal(msg, &data)
@@ -97,10 +97,10 @@ func MsgHandle(c *Client, msgType int, msg []byte) {
 		v := f(c, string(msg))
 		v.Id = data.Id //消息的唯一的id
 		d, _ = json.Marshal(v)
-		if utils.IsDebug() {
-			loginfo := "[GIN-ws] " + Timer.NowStr() + "-->userId: " + cast.ToString(c.UserId) + "-->Request data:" + string(msg) + "\n\t-->Response body: " + string(d)
-			fmt.Println(loginfo)
-			Logger.Info(loginfo)
+		if Tools.IsDebug() {
+			logInfo := "[GIN-ws] " + Timer.GetNowStr() + "-->userId: " + cast.ToString(c.UserId) + "-->Request data:" + string(msg) + "\n\t-->Response body: " + string(d)
+			fmt.Println(logInfo)
+			Logger.Info(logInfo)
 		}
 	} else {
 		d, _ = json.Marshal(Response{
@@ -113,13 +113,12 @@ func MsgHandle(c *Client, msgType int, msg []byte) {
 	c.SendMsg(d)
 }
 
-//向对应的客户端发送信息
+// 向对应的客户端发送信息
 func (c *Client) SendMsg(msg []byte) {
 	if c == nil {
 		return
 	}
-	sendMsg := msg
-	c.Send <- sendMsg
+	c.Send <- msg
 }
 
 const (
@@ -138,7 +137,7 @@ var (
 	}
 )
 
-//读取客户端消息
+// 读取客户端消息
 func (c *Client) readPump() {
 	defer func() {
 		// recover() 可以将捕获到的panic信息打印
@@ -166,7 +165,7 @@ func (c *Client) readPump() {
 	}
 }
 
-//发送消息给客户端
+// 发送消息给客户端
 func (c *Client) writePump() {
 	defer func() {
 		// recover() 可以将捕获到的panic信息打印
