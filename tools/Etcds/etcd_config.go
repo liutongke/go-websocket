@@ -1,9 +1,9 @@
 package Etcds
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	"go-websocket/config"
 	"go-websocket/tools/Dir"
+	"go.etcd.io/etcd/client/v3"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"
@@ -26,7 +26,7 @@ import (
 // PermitWithoutStream：当设置为 true 时，允许客户端在没有任何活动流（RPC）的情况下向服务器发送保活探测。
 func EtcdConfig() clientv3.Config {
 	etcdConfig := config.GetConf().Etcd
-	
+
 	return clientv3.Config{
 		Endpoints:            []string{etcdConfig.Addr},
 		AutoSyncInterval:     etcdConfig.AutoSyncInterval * time.Second,

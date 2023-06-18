@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/coreos/etcd/clientv3"
 	"go-websocket/tools/Timer"
 	"go-websocket/tools/Tools"
+	"go.etcd.io/etcd/client/v3"
 	"log"
 	"sync"
 )

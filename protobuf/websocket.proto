@@ -1,0 +1,40 @@
+syntax = "proto3"; // 版本声明，使用Protocol Buffers v3版本
+
+package pb; // 包名
+
+option go_package = "./pb";
+// 定义一个打招呼服务
+service Greeter {
+  rpc SendUserMsgToLocal (SendUserMsgToLocalRequest) returns (SendUserResponse) {}
+  rpc SendGroupMsgToLocal (SendGroupMsgToLocalRequest) returns (SendGroupResponse) {}
+  rpc SendAllMsgToLocal (SendAllMsgToLocalRequest) returns (SendAllResponse) {}
+}
+
+//给全服用户发送消息
+message SendAllMsgToLocalRequest{
+  bytes data = 1;
+}
+
+message SendAllResponse{
+
+}
+
+// 给单个用户发送消息
+message SendUserMsgToLocalRequest {
+  int64 userId = 1;
+  bytes data = 2;
+}
+
+message SendUserResponse {
+  //  string message = 1;
+}
+
+// 给小组用户发送消息
+message SendGroupMsgToLocalRequest {
+  int64 groupId = 1;
+  bytes data = 2;
+}
+
+message SendGroupResponse {
+  //  string message = 1;
+}

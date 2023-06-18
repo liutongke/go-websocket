@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-websocket/app/services/bindCenter"
+	"go-websocket/app/services/grpc"
 	"go-websocket/app/services/socket"
 	"go-websocket/app/services/task"
 	"go-websocket/config"
@@ -48,7 +49,7 @@ func Init() {
 	RdLine.InitRdLine()
 
 	if config.GetConf().CommonConf.IsOpenRpc {
-		//go grpcService.InitGrpcServer() //启动grpc
+		go grpc.InitGrpcServer() //启动grpc
 	}
 	bindCenter.NewService().InitSetServer() //初始化绑定
 }
