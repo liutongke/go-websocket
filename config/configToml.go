@@ -7,6 +7,7 @@ type TomlConfig struct {
 	Mysql      mysql
 	Redis      redis
 	Etcd       etcd
+	Grpc       grpc
 	CommonConf CommonConf
 	WebSocket  WebSocket
 }
@@ -14,7 +15,6 @@ type TomlConfig struct {
 // 服务器配置
 type server struct {
 	Port    string
-	RpcPort string
 	Mode    int
 	Cluster bool
 	TcpPort string
@@ -57,11 +57,16 @@ type etcd struct {
 	ErrorOutputPaths     string
 }
 
+type grpc struct {
+	RpcPort   string
+	IsOpenRpc bool
+	Tsl       bool
+}
+
 // 公共文件配置
 type CommonConf struct {
 	IsOpenWebsocket bool   //false关闭true开启
 	MgCk            string //敏感词路径
-	IsOpenRpc       bool   //是否开启rpc
 }
 
 type WebSocket struct {

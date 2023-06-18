@@ -32,3 +32,17 @@ func Init() *TomlConfig {
 	})
 	return conf
 }
+func InitTest() *TomlConfig {
+	once.Do(func() {
+		var filePath string
+		if Tools.IsDebug() {
+			filePath = Dir.GetAbsDirPath("../../config/config.toml")
+		} else {
+			filePath = Dir.GetAbsDirPath("../../config/config_line.toml")
+		}
+		if _, err := toml.DecodeFile(filePath, &conf); err != nil {
+			panic(err)
+		}
+	})
+	return conf
+}

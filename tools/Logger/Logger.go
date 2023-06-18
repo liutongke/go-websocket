@@ -42,11 +42,6 @@ func (l *Logger) runLogs() {
 
 // 写入日志信息2021-01-08 12:09:22|DEBUG|REQ:App.Auth.Index|
 func (fl *Logger) log(saveName string, Level string) {
-	isDebug := false
-	if isDebug { //判断是否是线下开发模式
-		return
-	}
-
 	file, err := os.OpenFile(Dir.GetAbsDirPath("log/"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("open file failed, err:", err)

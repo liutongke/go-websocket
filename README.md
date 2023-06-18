@@ -28,6 +28,11 @@ WebSocket请求：
     
 docker run时候使用`-e MY_IP=%myip%`将 IP 地址作为环境变量 MY_IP 传递给 Docker 容器
 
+### 要查看 Docker 容器中的环境变量（ENV 变量）
+```
+docker exec <容器名称或容器ID> env
+```
+
 go语言获取环境变量:
 
 ```go
@@ -44,8 +49,6 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 
 
-protoc -I ./protobuf ./protobuf/websocket.proto -go-grpc_out=:./protobuf/pb
-protoc -I ./protobuf ./protobuf/websocket.proto --go_out=./protobuf --go-grpc_out=./protobuf
 protoc -I ./protobuf ./protobuf/websocket.proto --go_out=./app\services\grpc --go-grpc_out=./app\services\grpc
 ```
 
@@ -58,3 +61,5 @@ protoc -I ./protobuf ./protobuf/websocket.proto --go_out=./app\services\grpc --g
 请注意，您需要确保已经安装了 protoc 编译器，并且已经安装了 protoc-gen-go 和 protoc-gen-go-grpc 插件。这些插件负责生成 Go 代码和 gRPC 相关的代码。
 
 go get go.etcd.io/etcd/client/v3
+
+

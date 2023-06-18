@@ -2,10 +2,6 @@ package Etcds
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"go-websocket/tools/Timer"
-	"go-websocket/tools/Tools"
 	"go.etcd.io/etcd/client/v3"
 	"log"
 	"sync"
@@ -16,7 +12,6 @@ type EtcdRegister struct {
 	LeaseID       clientv3.LeaseID                        //租约ID
 	KeepAliveChan <-chan *clientv3.LeaseKeepAliveResponse //租约keepalieve相应chan
 	rwMutex       sync.RWMutex
-	canclefunc    func()
 	UserList      map[string]string
 }
 
@@ -32,7 +27,9 @@ func NewEtcdRegister() *EtcdRegister {
 	return etcdRegister
 }
 
-func (e *EtcdRegister) EtcdStartRegister() {
+type FunRegister func(*EtcdRegister) // 声明了一个函数类型
+
+func (e *EtcdRegister) EtcdStartRegister(fun FunRegister) {
 	// 创建 etcd 客户端连接
 
 	client, err := clientv3.New(EtcdConfig())
@@ -65,7 +62,8 @@ func (e *EtcdRegister) EtcdStartRegister() {
 	}
 	e.KeepAliveChan = keepAliveChan
 	go listen(keepAliveChan)
-	e.RegisterServer() //注册本机
+	//e.RegisterServer() //注册本机
+	fun(e) //注册本机
 	log.Println("注册服务启动成功")
 	log.Println("租约lease ID:", resp.ID)
 	select {}
@@ -99,40 +97,11 @@ func (e *EtcdRegister) PutKey(key, val string) (*clientv3.PutResponse, error) {
 func (e *EtcdRegister) DelKey(key string) int {
 	e.rwMutex.Lock()         // 加写锁
 	defer e.rwMutex.Unlock() // 释放写锁
-	resp, err := e.Client.Delete(context.TODO(), key, clientv3.WithLease(e.LeaseID))
+	resp, err := e.Client.Delete(context.TODO(), key)
 
 	if err != nil {
 		log.Println("Failed to put key-value pair:", err)
 		return 0
 	}
 	return int(resp.Deleted)
-}
-
-const (
-	ETCD_SERVER_LIST         = "/etcd_server_list/"
-	ETCD_PREFIX_ACCOUNT_INFO = "ws/account/" //用户帐号信息
-)
-
-type ServerInfo struct {
-	ServerIp string `json:"server-ip"`
-	Rpcport  string `json:"rpc-port"`
-	Tm       string `json:"tm"`
-}
-
-// RegisterServer 注册主机
-func (e *EtcdRegister) RegisterServer() {
-	key := fmt.Sprintf("%s%s", ETCD_SERVER_LIST, Tools.GetLocalIp())
-
-	info := ServerInfo{
-		ServerIp: Tools.GetLocalIp(),
-		Rpcport:  "go-websocket",
-		Tm:       Timer.GetNowStr(),
-	}
-	// 将Person对象转换为JSON字符串
-	val, err := json.Marshal(info)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	e.PutKey(key, string(val))
 }

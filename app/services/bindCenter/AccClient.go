@@ -30,7 +30,7 @@ func GetBindInfo(userId int) BindUserInfo {
 // 将用户与应用服务器地址绑定
 func BindUidAndService(userId int) bool {
 	b, err := json.Marshal(BindUserInfo{
-		RpcAddr: Tools.GetLocalIp() + ":" + config.GetConf().Server.RpcPort,
+		RpcAddr: Tools.GetLocalIp() + ":" + config.GetConf().Grpc.RpcPort,
 		UserId:  userId,
 	})
 	if err == nil {

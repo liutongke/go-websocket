@@ -33,7 +33,7 @@ func grpcConn(addr string) *grpc.ClientConn {
 		return nil
 	}
 	//fmt.Println("grpc状态：", conn, conn.GetState())
-	fmt.Println("grpc状态:", addr)
+	//fmt.Println("grpc状态:", addr)
 	return conn
 }
 

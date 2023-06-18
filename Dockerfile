@@ -27,10 +27,10 @@ ENV GO111MODULE=on \
 COPY . .
 
 # 下载所依赖的模块
-#RUN go mod download
+RUN go mod download
 
 # 将我们的代码编译成二进制可执行文件main
-#RUN go build -o main .
+RUN go build -o main .
 
 #-n 是 supervisord 命令的一个选项，它表示以非守护进程模式（non-daemon mode）运行 supervisord。
-#CMD [ "supervisord" , "-n", "-c", "/etc/supervisor/supervisord.conf" ]
+CMD [ "supervisord" , "-n", "-c", "/etc/supervisor/supervisord.conf" ]

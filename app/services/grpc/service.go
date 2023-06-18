@@ -43,7 +43,7 @@ func (s *server) SendAllMsgToLocal(ctx context.Context, in *pb.SendAllMsgToLocal
 }
 
 func InitGrpcServer() {
-	lis, err := net.Listen("tcp", ":"+config.GetConf().Server.RpcPort) // 监听本地的端口
+	lis, err := net.Listen("tcp", ":"+config.GetConf().Grpc.RpcPort) // 监听本地的端口
 	if err != nil {
 		panic(fmt.Sprintf("failed to listen: %v", err))
 		return
@@ -55,7 +55,7 @@ func InitGrpcServer() {
 	reflection.Register(s) //在给定的gRPC服务器上注册服务器反射服务
 	// Serve方法在lis上接受传入连接，为每个连接创建一个ServerTransport和server的goroutine。
 	// 该goroutine读取gRPC请求，然后调用已注册的处理程序来响应它们。
-	log.Printf("开启的RPC端口-------------->：%s \n", config.GetConf().Server.RpcPort, err)
+	log.Printf("开启的RPC端口-------------->：%s \n", config.GetConf().Grpc.RpcPort, err)
 	err = s.Serve(lis)
 
 	if err != nil {

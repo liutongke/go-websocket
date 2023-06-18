@@ -105,13 +105,13 @@ func DelTimeoutService() {
 func GetService() *Service {
 	return &Service{
 		Ip:      Tools.GetLocalIp(),
-		Rpcport: config.GetConf().Server.RpcPort,
+		Rpcport: config.GetConf().Grpc.RpcPort,
 	}
 }
 
 // 获取ip+端口组合体字符串
 func GetServiceToStr() (str string) {
-	return fmt.Sprintf("%s:%s", Tools.GetLocalIp(), config.GetConf().Server.RpcPort)
+	return fmt.Sprintf("%s:%s", Tools.GetLocalIp(), config.GetConf().Grpc.RpcPort)
 }
 
 // 将ip+端口组合体字符串拆解
