@@ -14,9 +14,6 @@ var (
 )
 
 // 获取配置
-func GetConfClient() *TomlConfig {
-	return conf
-}
 func GetConf() *TomlConfig {
 	return conf
 }

@@ -11,7 +11,7 @@ func (c *Client) Heartbeat(currentTime uint64) {
 
 // 心跳超时
 func (c *Client) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {
-	if c.HeartbeatTime+config.GetConfClient().WebSocket.HeartbeatExpirationTime <= currentTime {
+	if c.HeartbeatTime+config.GetConf().WebSocket.HeartbeatExpirationTime <= currentTime {
 		timeout = true
 	}
 	return

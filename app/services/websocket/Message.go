@@ -27,7 +27,7 @@ func SendMsgALl(data map[string]interface{}) {
 
 	localAddr := bindCenter.GetServiceToStr()
 	for _, addr := range serviceList {
-		if strings.Compare(localAddr, addr) != 0 {
+		if strings.Compare(localAddr, addr.Ip) != 0 {
 			//grpcClient.SendMsgALl(addr, b) //全服发送
 		}
 	}
@@ -101,7 +101,7 @@ func SendMsgToGroup(groupId int, data map[string]interface{}) {
 
 	localAddr := bindCenter.GetServiceToStr()
 	for _, addr := range serviceList {
-		if strings.Compare(localAddr, addr) != 0 {
+		if strings.Compare(localAddr, addr.Ip) != 0 {
 			//grpcClient.SendGroupMsgToLocal(addr, groupId, b) //给对应的群发送消息
 		}
 	}

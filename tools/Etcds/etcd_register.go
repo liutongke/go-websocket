@@ -115,15 +115,17 @@ const (
 
 type ServerInfo struct {
 	ServerIp string `json:"server-ip"`
+	Rpcport  string `json:"rpc-port"`
 	Tm       string `json:"tm"`
 }
 
 // RegisterServer 注册主机
 func (e *EtcdRegister) RegisterServer() {
-	key := fmt.Sprintf("%s%s", ETCD_SERVER_LIST, Tools.GetServIp())
+	key := fmt.Sprintf("%s%s", ETCD_SERVER_LIST, Tools.GetLocalIp())
 
 	info := ServerInfo{
-		ServerIp: Tools.GetServIp(),
+		ServerIp: Tools.GetLocalIp(),
+		Rpcport:  "go-websocket",
 		Tm:       Timer.GetNowStr(),
 	}
 	// 将Person对象转换为JSON字符串

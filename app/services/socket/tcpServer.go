@@ -12,7 +12,7 @@ import (
 // 开始tcp连接
 func StartTcp() {
 	go func() {
-		listen, err := net.Listen("tcp", "127.0.0.1:"+config.GetConfClient().Server.TcpPort)
+		listen, err := net.Listen("tcp", "0.0.0.0:"+config.GetConf().Server.TcpPort)
 		if err != nil {
 			fmt.Println(fmt.Sprintf("listen failed, err:%v", err))
 			return

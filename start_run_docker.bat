@@ -21,6 +21,16 @@ if exist "%data_dir_log%" (
   echo Create a directory: %data_dir_log%
 )
 
+for /f "tokens=16" %%i in ('ipconfig ^|find /i "ipv4"') do (
+set myip=%%i
+:: 正常情况下find查询只有一行结果，如果主机安装了虚拟机则会有多个适配器有ip地址。第一个才是本机IP，故使用goto保证for只执行一次就跳出循环，防止后续myip的值被覆盖
+goto out
+)
+
+:: 标签
+:out
+
+
 docker build -t go-websocket:v1 .
 
-docker run -itd --name go-websocket-v1 -p 12223:12223 -p 8972:8972 -v %folder%:/var/www/html/runtime -v %data_dir_log%:/var/www/html/log go-websocket:v1
+docker run -itd --name go-websocket-v1 -e MY_IP=%myip% -e DOCKER_IN=1 -p 12223:12223 -p 8972:8972 -v %folder%:/var/www/html/runtime -v %data_dir_log%:/var/www/html/log go-websocket:v1

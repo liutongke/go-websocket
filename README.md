@@ -26,3 +26,13 @@ WebSocket请求：
     data 消息体
     ```
     
+docker run时候使用`-e MY_IP=%myip%`将 IP 地址作为环境变量 MY_IP 传递给 Docker 容器
+
+go语言获取环境变量:
+
+```go
+	ip := os.Getenv("MY_IP")
+	fmt.Println("IP Address:", ip)
+```
+
+`-e DOCKER_IN=1`设置当前服务是否在容器内运行

@@ -26,6 +26,9 @@ func GetRequestIP(c *gin.Context) string {
 
 // 获取本机IP地址
 func GetLocalIp() string {
+	if os.Getenv("DOCKER_IN") == "1" { //容器内
+		return os.Getenv("MY_IP")
+	}
 	ip, err := GetOutBoundIP()
 	if err != nil {
 		return ""

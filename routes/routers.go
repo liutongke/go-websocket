@@ -24,7 +24,7 @@ func SetupRouter() *gin.Engine {
 }
 
 func wsRouter(r *gin.Engine) {
-	if config.GetConfClient().CommonConf.IsOpenWebsocket { //是否开启websocket                                    //websocket连接
+	if config.GetConf().CommonConf.IsOpenWebsocket { //是否开启websocket                                    //websocket连接
 		r.GET("/ws", websocket.StartClientHub().StartWs)
 	}
 }
