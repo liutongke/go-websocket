@@ -17,7 +17,7 @@ type Msgck struct {
 func init() {
 	//var tbWords []Msgck
 	//
-	//filePath := Dir.GetAbsolutePath(config.GetConfClient().CommonConf.MgCk) // 打开json文件
+	//filePath := dir.GetAbsolutePath(config.GetConfClient().CommonConf.MgCk) // 打开json文件
 	//
 	//jsonFile, err := os.Open(filePath)
 	//if err != nil {

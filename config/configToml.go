@@ -6,6 +6,7 @@ type TomlConfig struct {
 	Server     server
 	Mysql      mysql
 	Redis      redis
+	Etcd       etcd
 	CommonConf CommonConf
 	WebSocket  WebSocket
 }
@@ -20,6 +21,14 @@ type server struct {
 }
 
 // redis连接配置
+type redis struct {
+	MaxIdle     int           //最大闲置连接数量
+	MaxActive   int           //最大活动连接数
+	IdleTimeout time.Duration //闲置过期时间 在get函数中会有逻辑 删除过期的连接
+	Addr        string
+	Password    string
+	DB          int
+}
 type mysql struct {
 	Addr               string
 	SetMaxIdleConn     int
@@ -32,14 +41,20 @@ type mysql struct {
 	SlowThreshold      int
 }
 
-// redis连接配置
-type redis struct {
-	MaxIdle     int           //最大闲置连接数量
-	MaxActive   int           //最大活动连接数
-	IdleTimeout time.Duration //闲置过期时间 在get函数中会有逻辑 删除过期的连接
-	Addr        string
-	Password    string
-	DB          int
+type etcd struct {
+	Addr                 string
+	LogLevel             int
+	LogFolder            string
+	Username             string
+	Password             string
+	MaxCallSendMsgSize   int
+	MaxCallRecvMsgSize   int
+	AutoSyncInterval     time.Duration
+	DialTimeout          time.Duration
+	DialKeepAliveTime    time.Duration
+	DialKeepAliveTimeout time.Duration
+	OutputPaths          string
+	ErrorOutputPaths     string
 }
 
 // 公共文件配置

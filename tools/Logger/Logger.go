@@ -47,7 +47,7 @@ func (fl *Logger) log(saveName string, Level string) {
 		return
 	}
 
-	file, err := os.OpenFile(Dir.GetAbsDirPath("/runtime/"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(Dir.GetAbsDirPath("log/"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("open file failed, err:", err)
 		return

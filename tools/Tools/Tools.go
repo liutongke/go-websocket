@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	Dir "go-websocket/tools/Dir"
+	"go-websocket/tools/Dir"
 	"io/ioutil"
 	"math/rand"
 	"net"
@@ -234,7 +234,7 @@ func ArrayKeys(elements map[string]int) []interface{} {
 *
 @保存图片到指定文件夹
 @file 要保存的文件字节流
-@Dir 文件将要保存的文件夹
+@dir 文件将要保存的文件夹
 return 文件名称
 return 文件的sid，唯一值
 */

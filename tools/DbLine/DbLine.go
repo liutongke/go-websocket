@@ -23,6 +23,7 @@ var (
 
 // https://gorm.io/zh_CN/docs/connecting_to_the_database.html
 func InitDbLine() {
+	//config.Init() //初始化配置文件,test用例时候使用的平时可以删除
 	once.Do(func() {
 		Instance = connect()
 	})
@@ -88,28 +89,28 @@ func getGormConfig() *gorm.Config {
 }
 
 func getLogger() logger.Interface {
-	milliseconds := config.GetConf().Mysql.SlowThreshold
 	//Silent：静默模式，不输出任何日志。 Error：错误级别，只输出错误日志。 Warn：警告级别，输出错误和警告日志。 Info：信息级别，输出错误、警告和信息日志。
 	return logger.New(
 		initLog(),
 		logger.Config{
-			SlowThreshold:             time.Duration(milliseconds) * time.Millisecond, // 设置慢查询的阈值，超过该阈值的查询将被认为是慢查询，默认单位为纳秒
-			LogLevel:                  getLogLevel(),                                  // GORM 定义了这些日志级别：Silent、Error、Warn、Info
-			IgnoreRecordNotFoundError: true,                                           // 设置是否忽略 gorm.ErrRecordNotFound 错误，如果设置为 true，则不会将该错误记录到日志中。
-			ParameterizedQueries:      false,                                          // 设置是否在日志中包含 SQL 查询的参数信息 如果将其设置为 true，则日志中将不会包含参数信息，只会显示占位符。
-			Colorful:                  false,                                          // 设置是否在终端中输出带有颜色的日志。
+			SlowThreshold:             time.Duration(config.GetConf().Mysql.SlowThreshold) * time.Millisecond, // 设置慢查询的阈值，超过该阈值的查询将被认为是慢查询，默认单位为纳秒
+			LogLevel:                  getLogLevel(),                                                          // GORM 定义了这些日志级别：Silent、Error、Warn、Info
+			IgnoreRecordNotFoundError: true,                                                                   // 设置是否忽略 gorm.ErrRecordNotFound 错误，如果设置为 true，则不会将该错误记录到日志中。
+			ParameterizedQueries:      false,                                                                  // 设置是否在日志中包含 SQL 查询的参数信息 如果将其设置为 true，则日志中将不会包含参数信息，只会显示占位符。
+			Colorful:                  false,                                                                  // 设置是否在终端中输出带有颜色的日志。
 		},
 	)
 }
 
 // 初始化日志
 func initLog() *log.Logger {
-	if config.GetConf().Mysql.Cmd {
+	mysqlConfig := config.GetConf()
+	if mysqlConfig.Mysql.Cmd {
 
 		return log.New(os.Stdout, "\r\n", log.LstdFlags) // 打印到控制台
 
 	} else {
-		fileLogName := fmt.Sprintf("%s/%s.log", Dir.GetAbsDirPath(config.GetConf().Mysql.LogFolder), Timer.GetDateId())
+		fileLogName := fmt.Sprintf("%s/mysql_%s.log", Dir.GetAbsDirPath(mysqlConfig.Mysql.LogFolder), Timer.GetDateId())
 		// 创建日志文件
 		file, err := os.OpenFile(fileLogName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 

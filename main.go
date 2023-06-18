@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"go-websocket/app/services/grpcService"
 	"go-websocket/app/services/socket"
 	"go-websocket/app/services/task"
 	"go-websocket/config"
 	routers "go-websocket/routes"
 	"go-websocket/tools/DbLine"
 	"go-websocket/tools/Dir"
+	"go-websocket/tools/Etcds"
 	"go-websocket/tools/Logger"
 	"go-websocket/tools/RdLine"
 	"go-websocket/tools/Timer"
@@ -44,8 +44,10 @@ func Init() {
 	DbLine.InitDbLine()
 	RdLine.InitRdLine()
 	if config.GetConfClient().CommonConf.IsOpenRpc {
-		go grpcService.InitGrpcServer() //启动grpc
+		//go grpcService.InitGrpcServer() //启动grpc
 	}
+	go Etcds.NewEtcdDiscovery().EtcdStartDiscovery()
+	go Etcds.NewEtcdRegister().EtcdStartRegister()
 }
 
 // 启动创建文件夹

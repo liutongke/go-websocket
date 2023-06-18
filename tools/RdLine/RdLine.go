@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"go-websocket/config"
+
 	"time"
 )
 
@@ -12,6 +13,7 @@ var (
 )
 
 func InitRdLine() {
+	//config.Init() //初始化配置文件,test用例时候使用的平时可以删除
 	RedisPool = initRedisPool()
 }
 
