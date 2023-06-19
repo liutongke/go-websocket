@@ -3,11 +3,11 @@ package Etcds
 import (
 	"encoding/json"
 	"fmt"
+	"go-websocket/config"
+	"go-websocket/tools/Timer"
+	"go-websocket/tools/Tools"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
-	"nat-x/config"
-	"nat-x/tools/Timer"
-	"nat-x/tools/Tools"
 	"testing"
 	"time"
 )
@@ -23,8 +23,11 @@ func TestEtcdClient(t *testing.T) {
 	for _, item := range resp.Kvs {
 		log.Printf("Get:Key: %s, Value: %s\n", item.Key, item.Value)
 	}
-
-	log.Println("Del:", Del(key))
+	del, err := Del(key)
+	if err != nil {
+		fmt.Println(err)
+	}
+	log.Println("Del:", del)
 
 	prefix, _ := GetPrefix("/TestEtcd")
 	for _, item := range prefix.Kvs {
@@ -51,7 +54,12 @@ func TestEtcdRegister(t *testing.T) {
 	log.Printf("LeaseID:%d", GetEtcdRegister().LeaseID)
 	key, err := GetEtcdRegister().PutKey("GetEtcdRegister", "GetEtcdRegister")
 	log.Println("GetEtcdRegister", key, err)
-	log.Println("GetEtcdRegister", GetEtcdRegister().DelKey("GetEtcdRegister"))
+
+	delKey, err := GetEtcdRegister().DelKey("GetEtcdRegister")
+	if err != nil {
+		fmt.Println(err)
+	}
+	log.Println("GetEtcdRegister:", delKey)
 
 }
 

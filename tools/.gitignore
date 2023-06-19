@@ -4,3 +4,4 @@
 /config/*.toml
 go.mod
 go.sum
+/Etcds/log

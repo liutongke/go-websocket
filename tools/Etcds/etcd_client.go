@@ -2,6 +2,7 @@ package Etcds
 
 import (
 	"context"
+	"fmt"
 	"go.etcd.io/etcd/client/v3"
 	"log"
 	"sync"
@@ -29,17 +30,19 @@ func GetInstance() *clientv3.Client {
 	return etcdKvClient
 }
 
-// 添加一个key
+// Put 添加一个key
 func Put(key, value string) error {
 	_, err := GetInstance().Put(context.Background(), key, value)
 	return err
 }
 
+// Get 获取一个key
 func Get(key string) (resp *clientv3.GetResponse, err error) {
 	resp, err = GetInstance().Get(context.Background(), key)
 	return resp, err
 }
 
+// GetPrefix 通过前缀获取key
 func GetPrefix(prefix string) (*clientv3.GetResponse, error) {
 	kv := clientv3.NewKV(GetInstance())
 	// 使用 Get 方法获取指定前缀的键值对
@@ -55,11 +58,12 @@ func GetPrefix(prefix string) (*clientv3.GetResponse, error) {
 	return resp, err
 }
 
-func Del(key string) int {
+// Del 删除key
+func Del(key string) (int, error) {
 	kv := clientv3.NewKV(GetInstance())
 	resp, err := kv.Delete(context.Background(), key)
 	if err != nil {
-		return 0
+		return 0, fmt.Errorf("del error")
 	}
-	return int(resp.Deleted)
+	return int(resp.Deleted), nil
 }

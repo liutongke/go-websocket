@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go-websocket/config"
+	"go-websocket/tools"
 	"go-websocket/tools/Dir"
 	"go-websocket/tools/Timer"
 	"gorm.io/driver/mysql"
@@ -23,7 +24,6 @@ var (
 
 // https://gorm.io/zh_CN/docs/connecting_to_the_database.html
 func InitDbLine() {
-	//config.Init() //初始化配置文件,test用例时候使用的平时可以删除
 	once.Do(func() {
 		Instance = connect()
 	})
@@ -43,11 +43,11 @@ func connect() *gorm.DB {
 	db, err = gorm.Open(getDialector(dbLines.Mysql.Addr), getGormConfig())
 
 	if err != nil {
-		panic("gorm连接错误：" + err.Error())
+		tools.EchoError(fmt.Sprintf("GORM dial MySQL error: %v", err))
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		panic("gorm数据库连接池错误：" + err.Error())
+		tools.EchoError(fmt.Sprintf("GORM MySQL init pool error : %v", err))
 	}
 
 	//最大空闲连接数（MaxIdleConns）：这是连接池中允许保持的最大空闲连接数。空闲连接是指当前没有被应用程序使用的连接。当应用程序需要新的数据库连接时，它会首先尝试从空闲连接中获取。如果空闲连接数已达到最大限制，则新的连接将被创建。
@@ -116,8 +116,7 @@ func initLog() *log.Logger {
 
 		if err != nil {
 			// 错误处理
-			log.Printf("getLogger OpenFile:%s", err)
-			panic(err)
+			tools.EchoError(fmt.Sprintf("Open MySQL file err: %s", err))
 		}
 
 		return log.New(file, "\r\n", log.LstdFlags) // 保存到文件

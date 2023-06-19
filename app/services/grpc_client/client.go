@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cast"
 	"go-websocket/app/services/grpc/pb"
+	"go-websocket/tools"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -29,8 +30,7 @@ func grpcConn(addr string) *grpc.ClientConn {
 	// 连接服务器
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
-		fmt.Printf(fmt.Sprintf("faild to connect: %v", err))
-		return nil
+		tools.EchoError(fmt.Sprintf("GRPC faild to connect: %v", err))
 	}
 	//fmt.Println("grpc状态：", conn, conn.GetState())
 	//fmt.Println("grpc状态:", addr)
@@ -39,7 +39,7 @@ func grpcConn(addr string) *grpc.ClientConn {
 
 // 给单个用户发送信息
 func SendUserMsg(addr string, toUserId int, data []byte) {
-	fmt.Println("客户端SendUserMsg准备开始发送信息:", addr, toUserId, string(data))
+	fmt.Printf("客户端SendUserMsg准备开始发送信息 - addr: %s - toUserId: %d - data:%s", addr, toUserId, string(data))
 	conn := grpcConn(addr)
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)
@@ -51,7 +51,7 @@ func SendUserMsg(addr string, toUserId int, data []byte) {
 
 // 给群发送消息
 func SendGroupMsgToLocal(addr string, toGroupId int, data []byte) {
-	fmt.Println("客户端SendGroupMsgToLocal准备开始发送信息:", addr, toGroupId, string(data))
+	fmt.Printf("客户端SendGroupMsgToLocal准备开始发送信息 - addr: %s - toGroupId: %d - data:%s", addr, toGroupId, string(data))
 	conn := grpcConn(addr)
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)
@@ -62,7 +62,7 @@ func SendGroupMsgToLocal(addr string, toGroupId int, data []byte) {
 }
 
 func SendMsgALl(addr string, data []byte) {
-	fmt.Println("客户端SendMsgALl准备开始发送信息:", addr, string(data))
+	fmt.Printf("客户端SendMsgALl准备开始发送信息 - addr: %s - data:%s", addr, string(data))
 	conn := grpcConn(addr)
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)

@@ -1,48 +1,57 @@
 package Mgck
 
 import (
+	"encoding/json"
 	"github.com/bean-du/dfa"
+	"go-websocket/config"
+	"go-websocket/tools"
+	"go-websocket/tools/Dir"
+	"io/ioutil"
 )
 
 var (
-	fda       *dfa.DFA
-	sensitive []string
+	fda *dfa.DFA
 )
 
-type Msgck struct {
-	Words string
+type Data struct {
+	Words interface{} `json:"words"`
 }
 
 // 初始化一下敏感词
-func init() {
-	//var tbWords []Msgck
-	//
-	//filePath := dir.GetAbsolutePath(config.GetConfClient().CommonConf.MgCk) // 打开json文件
-	//
-	//jsonFile, err := os.Open(filePath)
-	//if err != nil {
-	//	return
-	//}
-	//defer jsonFile.Close() // 要记得关闭
-	//byteValue, err := ioutil.ReadAll(jsonFile)
-	//if err != nil {
-	//	return
-	//}
-	//json.Unmarshal(byteValue, &tbWords)
-	//for _, v := range tbWords {
-	//	sensitive = append(sensitive, v.Words)
-	//}
-	//fda = dfa.New()
-	//fda.AddBadWords(sensitive)
+func InitWord() {
 
+	filePath := Dir.GetAbsDirPath(config.GetConf().CommonConf.MgCk)
+
+	content, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		tools.EchoError(err.Error())
+	}
+
+	var data []Data
+	err = json.Unmarshal(content, &data)
+	if err != nil {
+		tools.EchoError(err.Error())
+	}
+
+	var sensitive []string
+
+	for _, v := range data {
+		// 将接口值断言为字符串类型
+		str, ok := v.Words.(string)
+		if ok {
+			sensitive = append(sensitive, str)
+		}
+
+	}
+
+	fda = dfa.New()
+	fda.AddBadWords(sensitive)
 }
 
-func NewWords() *dfa.DFA {
-	return fda
-}
-
+// CheckWord https://pkg.go.dev/github.com/bean-du/dfa@v1.0.2#section-readme
+// DFA 敏感词检测
 // 检查敏感词 true敏感词 false非敏感词
-func CheckWord(words string) bool {
-	_, _, res := fda.Check(words)
-	return res
+func CheckWord(words string) ([]string, []string, bool) {
+	w1, w2, res := fda.Check(words)
+	return w1, w2, res
 }

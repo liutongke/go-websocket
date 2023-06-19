@@ -2,10 +2,10 @@ package Etcds
 
 import (
 	"context"
+	"fmt"
 	"go-websocket/tools"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
-	"os"
 	"time"
 )
 
@@ -24,10 +24,6 @@ func startHeartbeat() {
 	cancel()
 
 	if err != nil {
-		//log.Println("Etcd服务器连接失败:", err)
-		tools.EchoError("Etcd服务器连接失败,服务器终止运行")
-		os.Exit(1)
-	} else {
-		log.Println("Etcd连接可用")
+		tools.EchoError(fmt.Sprintf("Etcd服务器连接失败,服务器终止运行:%v", err))
 	}
 }

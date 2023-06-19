@@ -2,8 +2,10 @@ package Etcds
 
 import (
 	"context"
+	"fmt"
+	"go-websocket/tools"
+	"go-websocket/tools/Timer"
 	"go.etcd.io/etcd/client/v3"
-	"log"
 	"sync"
 )
 
@@ -35,8 +37,7 @@ func (e *EtcdDiscovery) EtcdStartDiscovery(keyPrefixes []string) {
 	// 创建 Etcd 客户端
 	client, err := clientv3.New(EtcdConfig())
 	if err != nil {
-		log.Println("Failed to create etcd client:", err)
-		return
+		tools.EchoError(fmt.Sprintf("Failed to create etcd client:%v", err))
 	}
 	e.Client = client
 	defer client.Close()
@@ -52,7 +53,7 @@ func (e *EtcdDiscovery) EtcdStartDiscovery(keyPrefixes []string) {
 	for _, prefix := range keyPrefixes {
 		go e.watchPrefix(ctx, client, prefix)
 	}
-	log.Println("发现服务启动成功")
+	tools.EchoSuccess(fmt.Sprintf("%s:发现服务启动成功", Timer.GetNowStr()))
 
 	select {} // 阻塞主线程，等待程序退出
 }

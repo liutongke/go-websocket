@@ -23,8 +23,8 @@ type Client struct {
 }
 
 // 初始化
-func NewClient(Hub *Hub, userId int, openId string, ws *websocket.Conn, firstTime uint64) (client *Client) {
-	client = &Client{
+func NewClient(Hub *Hub, userId int, openId string, ws *websocket.Conn, firstTime uint64) *Client {
+	client := &Client{
 		Hub:           Hub,
 		Ws:            ws,
 		Send:          make(chan []byte, 100),
@@ -39,7 +39,7 @@ func NewClient(Hub *Hub, userId int, openId string, ws *websocket.Conn, firstTim
 
 // 启动websocket
 func (hub *Hub) StartWs(ctx *gin.Context) {
-	upgrader := websocket.Upgrader{
+	upgrade := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		}, //跨域true忽略
@@ -53,9 +53,9 @@ func (hub *Hub) StartWs(ctx *gin.Context) {
 		upgradeHeader.Set("Set-Cookie", hdr)
 	}
 
-	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, upgradeHeader)
+	conn, err := upgrade.Upgrade(ctx.Writer, ctx.Request, upgradeHeader)
 	if err != nil {
-		fmt.Println("建立websocket连接失败:", err)
+		fmt.Printf("建立websocket连接失败: %v", err)
 		return
 	}
 	//token := ctx.Param("token")

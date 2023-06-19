@@ -37,7 +37,8 @@ func main() {
 func Init() {
 	p := socket.NewPool()
 	p.StartPool()
-	config.Init() //初始化配置文件
+	config.Init()                            //初始化配置文件
+	bind_center.NewService().InitSetServer() //初始化绑定
 	go Etcds.NewEtcdDiscovery(map[string]Etcds.FunDiscovery{"put": bind_center.EventPut, "del": bind_center.EventDel}).EtcdStartDiscovery([]string{"/prefix1", "/prefix2", "/net", "go-nat-x", Etcds.ETCD_SERVER_LIST, Etcds.ETCD_PREFIX_ACCOUNT_INFO})
 	go Etcds.NewEtcdRegister().EtcdStartRegister(bind_center.RegisterServer)
 	mkdir()             //启动项目时判断下文件夹
@@ -51,7 +52,6 @@ func Init() {
 	if config.GetConf().Grpc.IsOpenRpc {
 		go grpc_server.InitGrpcServer() //启动grpc
 	}
-	bind_center.NewService().InitSetServer() //初始化绑定
 }
 
 // 启动创建文件夹

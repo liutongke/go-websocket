@@ -2,6 +2,7 @@ package bind_center
 
 import (
 	"encoding/json"
+	"fmt"
 	"go-websocket/config"
 	"go-websocket/tools/RdLine"
 	"go-websocket/tools/Tools"
@@ -14,7 +15,7 @@ type BindUserInfo struct {
 	UserId  int    // 用户Id，用户登录以后才有
 }
 
-// 获取用户的绑定信息
+// GetBindInfo 获取用户的绑定信息
 func GetBindInfo(userId int) BindUserInfo {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()
@@ -27,22 +28,23 @@ func GetBindInfo(userId int) BindUserInfo {
 	return bindUserInfo
 }
 
-// 将用户与应用服务器地址绑定
+// BindUidAndService 将用户与应用服务器地址绑定
 func BindUidAndService(userId int) bool {
 	b, err := json.Marshal(BindUserInfo{
-		RpcAddr: Tools.GetLocalIp() + ":" + config.GetConf().Grpc.RpcPort,
+		RpcAddr: fmt.Sprintf("%s:%s", Tools.GetLocalIp(), config.GetConf().Grpc.RpcPort),
 		UserId:  userId,
 	})
 	if err == nil {
 		RdLine := RdLine.GetRedisClient()
 		defer RdLine.CloseRedisClient()
 		RdLine.Exec("hSet", keys, userId, string(b))
+		RdLine.Exec("EXPIRE", keys, 84600)
 		return true
 	}
 	return false
 }
 
-// 退出登录的时候删掉防止占用内容太大
+// DelBindUidAndService 退出登录的时候删掉防止占用内容太大
 func DelBindUidAndService(userId int) {
 	RdLine := RdLine.GetRedisClient()
 	defer RdLine.CloseRedisClient()

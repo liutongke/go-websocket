@@ -2,6 +2,9 @@ package Etcds
 
 import (
 	"context"
+	"fmt"
+	"go-websocket/tools"
+	"go-websocket/tools/Timer"
 	"go.etcd.io/etcd/client/v3"
 	"log"
 	"sync"
@@ -36,8 +39,7 @@ func (e *EtcdRegister) EtcdStartRegister(fun FunRegister) {
 
 	client, err := clientv3.New(EtcdConfig())
 	if err != nil {
-		log.Println("Failed to create etcd client:", err)
-		return
+		tools.EchoError(fmt.Sprintf("Failed to create etcd client:%v", err))
 	}
 	defer client.Close()
 
@@ -69,8 +71,8 @@ func (e *EtcdRegister) EtcdStartRegister(fun FunRegister) {
 	go listen(keepAliveChan, doneChan)
 	//e.RegisterServer() //注册本机
 	fun(e) //注册本机
-	log.Println("注册服务启动成功")
-	log.Println("租约lease ID:", resp.ID)
+
+	tools.EchoSuccess(fmt.Sprintf("%s:注册服务启动成功 - 租约lease ID:%d", Timer.GetNowStr(), resp.ID))
 
 	// 等待终止通知
 	<-doneChan
@@ -108,19 +110,17 @@ func (e *EtcdRegister) PutKey(key, val string) (*clientv3.PutResponse, error) {
 	defer e.rwMutex.Unlock() // 释放写锁
 	put, err := e.Client.Put(context.TODO(), key, val, clientv3.WithLease(e.LeaseID))
 	if err != nil {
-		log.Println("Failed to put key-value pair:", err)
-		return put, err
+		return put, fmt.Errorf("failed to put key-value pair:%v", err)
 	}
 	return put, err
 }
-func (e *EtcdRegister) DelKey(key string) int {
+func (e *EtcdRegister) DelKey(key string) (int, error) {
 	e.rwMutex.Lock()         // 加写锁
 	defer e.rwMutex.Unlock() // 释放写锁
 	resp, err := e.Client.Delete(context.TODO(), key)
 
 	if err != nil {
-		log.Println("Failed to put key-value pair:", err)
-		return 0
+		return 0, fmt.Errorf("failed to del key-value pair:%v", err)
 	}
-	return int(resp.Deleted)
+	return int(resp.Deleted), nil
 }

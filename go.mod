@@ -19,6 +19,8 @@ require (
 	github.com/spf13/cast v1.5.1
 	github.com/tidwall/gjson v1.8.0
 	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/yinheli/mahonia v0.0.0-20131226213531-0eef680515cc // indirect
+	github.com/yinheli/qqwry v0.0.0-20160229183603-f50680010f4a
 	go.etcd.io/etcd/client/v3 v3.5.9
 	go.uber.org/zap v1.24.0
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect

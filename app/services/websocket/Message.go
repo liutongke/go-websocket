@@ -2,9 +2,9 @@ package websocket
 
 import (
 	"encoding/json"
-	"fmt"
 	"go-websocket/app/services/bind_center"
 	"go-websocket/app/services/grpc_client"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -22,7 +22,7 @@ func SendMsgALl(data map[string]interface{}) {
 	NewRpcService().SendMsgALlLocal(b) //本机的用户来一波
 
 	if len(serviceList) <= 0 {
-		fmt.Println("服务器ip空")
+		log.Println("服务器ip空")
 		return
 	}
 
@@ -50,6 +50,7 @@ func (r *RpcService) SendMsgALlLocal(data []byte) {
 // 给用户发送信息需要判断是否在本机
 func SendUserMsg(toUserId int, data map[string]interface{}) {
 	toClient := GetClientHub().GetClientByUserId(toUserId)
+
 	b, _ := json.Marshal(Response{
 		Err:  http.StatusOK,
 		Msg:  "C2C friend msg",
@@ -63,10 +64,10 @@ func SendUserMsg(toUserId int, data map[string]interface{}) {
 	bindInfo := bind_center.GetBindInfo(toUserId) //不在本机上则调用GRPC
 	if bindInfo == (bind_center.BindUserInfo{}) {
 		//用户未登录
-		fmt.Println("用户未登录")
+		log.Println("用户未登录")
 		return
 	}
-	fmt.Println("开始调用grpc去发送消息")
+	log.Println("开始调用grpc去发送消息")
 	grpc_client.SendUserMsg(bindInfo.RpcAddr, toUserId, b)
 }
 
@@ -74,7 +75,7 @@ func SendUserMsg(toUserId int, data map[string]interface{}) {
 func (r *RpcService) SendUserMsgLocal(toUserId int, data []byte) {
 	toClient := GetClientHub().GetClientByUserId(toUserId)
 	if toClient == nil { //本机上发送
-		fmt.Println("SendToUserMsgLocal跨区聊天了", "toClient", toClient)
+		log.Printf("SendToUserMsgLocal跨区聊天了,toClient:%v", toClient)
 		return
 	}
 	toClient.SendMsg(data)
@@ -97,7 +98,7 @@ func SendMsgToGroup(groupId int, data map[string]interface{}) {
 	serviceList := bind_center.GetAllService()
 
 	if len(serviceList) <= 0 {
-		fmt.Println("服务器ip空")
+		log.Println("服务器ip空")
 		return
 	}
 
@@ -113,7 +114,7 @@ func SendMsgToGroup(groupId int, data map[string]interface{}) {
 func (r *RpcService) SendToGroupMsgToLocal(groupId int, data []byte) {
 	toGroupClientList := GetClientHub().GetGroupClientList(groupId)
 	if len(toGroupClientList) <= 0 {
-		fmt.Println("群不存在") //分组不存在
+		log.Println("群不存在") //分组不存在
 		return
 	}
 	GetClientHub().SendGroupMsg(toGroupClientList, data) //发送消息

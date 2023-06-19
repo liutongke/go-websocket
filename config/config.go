@@ -4,6 +4,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"go-websocket/tools/Dir"
 	"go-websocket/tools/Tools"
+	"log"
 	"sync"
 )
 
@@ -27,7 +28,7 @@ func Init() *TomlConfig {
 			filePath = Dir.GetAbsDirPath("./config/config_line.toml")
 		}
 		if _, err := toml.DecodeFile(filePath, &conf); err != nil {
-			panic(err)
+			log.Fatalf("init config err: %v", err)
 		}
 	})
 	return conf
@@ -41,7 +42,7 @@ func InitTest() *TomlConfig {
 			filePath = Dir.GetAbsDirPath("../../config/config_line.toml")
 		}
 		if _, err := toml.DecodeFile(filePath, &conf); err != nil {
-			panic(err)
+			log.Fatalf("init config err: %v", err)
 		}
 	})
 	return conf

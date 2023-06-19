@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"go-websocket/config"
+	"go-websocket/tools"
 	"go-websocket/tools/Dir"
 	"go-websocket/tools/Timer"
 	"os"
@@ -45,8 +46,7 @@ func (l *Logger) runLogs() {
 func (fl *Logger) log(saveName string, Level string) {
 	file, err := os.OpenFile(Dir.GetAbsDirPath(config.GetConf().Logger.LogFolder+"logger_"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		fmt.Println("open file failed, err:", err)
-		return
+		tools.EchoError(fmt.Sprintf("open logger file failed err: %v", err))
 	}
 	defer file.Close()
 	//fileName, filePath, line := getRunInfo(1)

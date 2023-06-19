@@ -69,7 +69,8 @@ type grpc struct {
 
 // 公共文件配置
 type CommonConf struct {
-	MgCk string //敏感词路径
+	MgCk       string //敏感词路径
+	ChunzhenIP string
 }
 
 type WebSocket struct {
