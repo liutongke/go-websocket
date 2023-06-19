@@ -5,6 +5,7 @@ import (
 	"go.etcd.io/etcd/client/v3"
 	"log"
 	"sync"
+	"time"
 )
 
 type EtcdRegister struct {
@@ -21,6 +22,7 @@ func GetEtcdRegister() *EtcdRegister {
 	return etcdRegister
 }
 func NewEtcdRegister() *EtcdRegister {
+	startHeartbeat()
 	etcdRegister = &EtcdRegister{
 		UserList: make(map[string]string),
 	}
@@ -61,20 +63,37 @@ func (e *EtcdRegister) EtcdStartRegister(fun FunRegister) {
 		log.Fatal(err)
 	}
 	e.KeepAliveChan = keepAliveChan
-	go listen(keepAliveChan)
+
+	doneChan := make(chan bool)
+
+	go listen(keepAliveChan, doneChan)
 	//e.RegisterServer() //注册本机
 	fun(e) //注册本机
 	log.Println("注册服务启动成功")
 	log.Println("租约lease ID:", resp.ID)
-	select {}
+
+	// 等待终止通知
+	<-doneChan
+
+	log.Println("续约循环已终止")
+
+	client.Close()
+
+	// 等待一段时间后重新创建客户端连接和续约循环
+	time.Sleep(1 * time.Second)
+	log.Println("续约续期重试...")
+	e.EtcdStartRegister(fun)
 }
 
-func listen(keepAliveChan <-chan *clientv3.LeaseKeepAliveResponse) {
+func listen(keepAliveChan <-chan *clientv3.LeaseKeepAliveResponse, doneChan chan<- bool) {
 	for {
 		select {
 		case leaseKeepResp := <-keepAliveChan:
 			if leaseKeepResp == nil {
 				log.Println("续约关闭")
+				// 通知终止
+				doneChan <- true
+				return
 			} else {
 				// 续约成功
 				//log.Println("续约成功")

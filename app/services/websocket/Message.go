@@ -3,14 +3,15 @@ package websocket
 import (
 	"encoding/json"
 	"fmt"
-	"go-websocket/app/services/bindCenter"
+	"go-websocket/app/services/bind_center"
+	"go-websocket/app/services/grpc_client"
 	"net/http"
 	"strings"
 )
 
 // 给所有用户发送消息
 func SendMsgALl(data map[string]interface{}) {
-	serviceList := bindCenter.GetAllService()
+	serviceList := bind_center.GetAllService()
 
 	b, _ := json.Marshal(Response{
 		Err:  http.StatusOK,
@@ -25,10 +26,10 @@ func SendMsgALl(data map[string]interface{}) {
 		return
 	}
 
-	localAddr := bindCenter.GetServiceToStr()
-	for _, addr := range serviceList {
-		if strings.Compare(localAddr, addr.Ip) != 0 {
-			//grpc.SendMsgALl(addr.Ip, b) //全服发送
+	localAddr := bind_center.GetServiceToStr()
+	for _, serverInfo := range serviceList {
+		if strings.Compare(localAddr, serverInfo.Addr) != 0 {
+			grpc_client.SendMsgALl(serverInfo.Addr, b) //全服发送
 		}
 	}
 	return
@@ -56,16 +57,17 @@ func SendUserMsg(toUserId int, data map[string]interface{}) {
 	})
 	if toClient != nil { //本机上发送
 		toClient.SendMsg(b)
+		return
 	}
 
-	bindInfo := bindCenter.GetBindInfo(toUserId) //不在本机上则调用GRPC
-	if bindInfo == (bindCenter.BindUserInfo{}) {
+	bindInfo := bind_center.GetBindInfo(toUserId) //不在本机上则调用GRPC
+	if bindInfo == (bind_center.BindUserInfo{}) {
 		//用户未登录
 		fmt.Println("用户未登录")
 		return
 	}
 	fmt.Println("开始调用grpc去发送消息")
-	//grpc.SendUserMsg(bindInfo.RpcAddr, toUserId, b)
+	grpc_client.SendUserMsg(bindInfo.RpcAddr, toUserId, b)
 }
 
 // 发送给本机用户
@@ -92,17 +94,17 @@ func SendMsgToGroup(groupId int, data map[string]interface{}) {
 		GetClientHub().SendGroupMsg(groupClientList, b)
 	}
 
-	serviceList := bindCenter.GetAllService()
+	serviceList := bind_center.GetAllService()
 
 	if len(serviceList) <= 0 {
 		fmt.Println("服务器ip空")
 		return
 	}
 
-	localAddr := bindCenter.GetServiceToStr()
-	for _, addr := range serviceList {
-		if strings.Compare(localAddr, addr.Ip) != 0 {
-			//grpc.SendGroupMsgToLocal(addr.Ip, groupId, b) //给对应的群发送消息
+	localAddr := bind_center.GetServiceToStr()
+	for _, serverInfo := range serviceList {
+		if strings.Compare(localAddr, serverInfo.Addr) != 0 {
+			grpc_client.SendGroupMsgToLocal(serverInfo.Addr, groupId, b) //给对应的群发送消息
 		}
 	}
 }

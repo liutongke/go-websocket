@@ -23,6 +23,7 @@ func GetEtcdDiscovery() *EtcdDiscovery {
 	return etcdDiscovery
 }
 func NewEtcdDiscovery(fun map[string]FunDiscovery) *EtcdDiscovery {
+	startHeartbeat()
 	etcdDiscovery = &EtcdDiscovery{
 		UserList:    make(map[string]string),
 		WatchEvents: fun,

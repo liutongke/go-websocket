@@ -1,4 +1,4 @@
-package bindCenter
+package bind_center
 
 import (
 	"encoding/json"

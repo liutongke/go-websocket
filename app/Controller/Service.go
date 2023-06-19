@@ -5,12 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/spf13/cast"
-	"go-websocket/app/services/grpc"
+	"go-websocket/app/services/bind_center"
 	"go-websocket/app/services/websocket"
 	"go-websocket/config"
 	"go-websocket/tools/DbLine"
 	"go-websocket/tools/RdLine"
-	"go-websocket/tools/Tools"
+	"go-websocket/tools/Timer"
 	"net/http"
 	"runtime"
 	"strconv"
@@ -20,7 +20,7 @@ import (
 // 发送全服信息
 func SendGlobalServMsg(c *gin.Context) {
 	data := make(map[string]interface{}, 10)
-	data["tm"] = time.Now().Format("2006-01-02 15:04:05")
+	data["tm"] = Timer.GetNowStr()
 	data["uuid"] = uuid.NewString()
 	websocket.SendMsgALl(data)
 	c.JSON(http.StatusOK, gin.H{
@@ -63,7 +63,8 @@ func SendGroupMsg(c *gin.Context) {
 
 // 查询系统状态
 func Status(c *gin.Context) {
-	grpc.SendUserMsg(fmt.Sprintf("%s:8972", Tools.GetLocalIp()), 1231, []byte("1111111111111111111"))
+	fmt.Println("Status:", bind_center.GetAllService())
+	//grpc_client.SendUserMsg(fmt.Sprintf("%s:8972", Tools.GetLocalIp()), 1231, []byte("1111111111111111111"))
 	data := make(map[string]interface{})
 	NumGoroutine := runtime.NumGoroutine()
 	NumCPU := runtime.NumCPU()

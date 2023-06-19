@@ -8,8 +8,12 @@ type TomlConfig struct {
 	Redis      redis
 	Etcd       etcd
 	Grpc       grpc
+	Logger     logger
 	CommonConf CommonConf
 	WebSocket  WebSocket
+}
+type logger struct {
+	LogFolder string
 }
 
 // 服务器配置
@@ -65,11 +69,11 @@ type grpc struct {
 
 // 公共文件配置
 type CommonConf struct {
-	IsOpenWebsocket bool   //false关闭true开启
-	MgCk            string //敏感词路径
+	MgCk string //敏感词路径
 }
 
 type WebSocket struct {
 	CleanConnection         bool //true
 	HeartbeatExpirationTime uint64
+	IsOpenWebsocket         bool //false关闭true开启
 }

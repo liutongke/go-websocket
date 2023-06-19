@@ -3,6 +3,7 @@ package Logger
 import (
 	"bufio"
 	"fmt"
+	"go-websocket/config"
 	"go-websocket/tools/Dir"
 	"go-websocket/tools/Timer"
 	"os"
@@ -42,16 +43,18 @@ func (l *Logger) runLogs() {
 
 // 写入日志信息2021-01-08 12:09:22|DEBUG|REQ:App.Auth.Index|
 func (fl *Logger) log(saveName string, Level string) {
-	file, err := os.OpenFile(Dir.GetAbsDirPath("log/"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(Dir.GetAbsDirPath(config.GetConf().Logger.LogFolder+"logger_"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("open file failed, err:", err)
 		return
 	}
 	defer file.Close()
 	//fileName, filePath, line := getRunInfo(1)
-	//log := getNowStrTm() + "|" + Level + "|" + saveName + "\n" + "|line:" + strconv.Itoa(line) + "|func name:" + fileName + "|file:" + filePath //将要打印的信息
+	//log := Timer.GetNowStr() + "|" + Level + "|" + saveName + "\n" + "|line:" + strconv.Itoa(line) + "|func name:" + fileName + "|file:" + filePath //将要打印的信息
+	log := Timer.GetNowStr() + " | " + Level
 	writer := bufio.NewWriter(file)
-	writer.WriteString(Level + "\n") //将数据先写入缓存
+	//writer.WriteString(Level + "\n") //将数据先写入缓存
+	writer.WriteString(log) //将数据先写入缓存
 	writer.Flush()
 }
 

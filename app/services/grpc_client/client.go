@@ -1,4 +1,4 @@
-package grpc
+package grpc_client
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 //func InitGrpcClient() {
 //	// 连接服务器
-//	conn, err := grpc.Dial(":8972", grpc.WithInsecure())
+//	conn, err := grpc_proto.Dial(":8972", grpc_proto.WithInsecure())
 //	if err != nil {
 //		fmt.Printf("faild to connect: %v", err)
 //	}

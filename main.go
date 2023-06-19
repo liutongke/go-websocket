@@ -1,10 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"go-websocket/app/services/bindCenter"
-	"go-websocket/app/services/grpc"
+	"go-websocket/app/services/bind_center"
+	"go-websocket/app/services/grpc_server"
 	"go-websocket/app/services/socket"
 	"go-websocket/app/services/task"
 	"go-websocket/config"
@@ -17,7 +16,6 @@ import (
 	"go-websocket/tools/Timer"
 	"go-websocket/tools/Tools"
 	"go-websocket/tools/validates"
-	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
 	"math/rand"
 	"time"
@@ -40,8 +38,8 @@ func Init() {
 	p := socket.NewPool()
 	p.StartPool()
 	config.Init() //初始化配置文件
-	go Etcds.NewEtcdDiscovery(map[string]Etcds.FunDiscovery{"put": EventPut, "del": EventDel}).EtcdStartDiscovery([]string{"/prefix1", "/prefix2", "/net", "go-nat-x", Etcds.ETCD_SERVER_LIST, Etcds.ETCD_PREFIX_ACCOUNT_INFO})
-	go Etcds.NewEtcdRegister().EtcdStartRegister(RegisterServer)
+	go Etcds.NewEtcdDiscovery(map[string]Etcds.FunDiscovery{"put": bind_center.EventPut, "del": bind_center.EventDel}).EtcdStartDiscovery([]string{"/prefix1", "/prefix2", "/net", "go-nat-x", Etcds.ETCD_SERVER_LIST, Etcds.ETCD_PREFIX_ACCOUNT_INFO})
+	go Etcds.NewEtcdRegister().EtcdStartRegister(bind_center.RegisterServer)
 	mkdir()             //启动项目时判断下文件夹
 	Logger.InitLogger() //初始化日志
 	routers.InitWsRouters()
@@ -51,9 +49,9 @@ func Init() {
 	RdLine.InitRdLine()
 
 	if config.GetConf().Grpc.IsOpenRpc {
-		go grpc.InitGrpcServer() //启动grpc
+		go grpc_server.InitGrpcServer() //启动grpc
 	}
-	bindCenter.NewService().InitSetServer() //初始化绑定
+	bind_center.NewService().InitSetServer() //初始化绑定
 }
 
 // 启动创建文件夹
@@ -66,34 +64,4 @@ func mkdir() {
 			log.Printf("创建文件夹%s成功！", v)
 		}
 	}
-}
-
-func EventPut(event *clientv3.Event) {
-	log.Printf("watch put test---------->key:%q val:%q", event.Kv.Key, event.Kv.Value)
-}
-func EventDel(event *clientv3.Event) {
-	log.Printf("watch del test---------->key:%q val:%q", event.Kv.Key, event.Kv.Value)
-}
-
-type ServerInfo struct {
-	ServerIp string `json:"server-ip"`
-	Rpcport  string `json:"rpc-port"`
-	Tm       string `json:"tm"`
-}
-
-// RegisterServer 注册主机
-func RegisterServer(e *Etcds.EtcdRegister) {
-	key := fmt.Sprintf("%s%s:nat-x", Etcds.ETCD_SERVER_LIST, Tools.GetLocalIp())
-
-	info := ServerInfo{
-		ServerIp: Tools.GetLocalIp(),
-		Rpcport:  "nat-x",
-		Tm:       Timer.GetNowStr(),
-	}
-	// 将Person对象转换为JSON字符串
-	val, err := json.Marshal(info)
-	if err != nil {
-		log.Fatal(err)
-	}
-	e.PutKey(key, string(val))
 }

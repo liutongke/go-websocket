@@ -3,11 +3,11 @@ package Etcds
 import (
 	"encoding/json"
 	"fmt"
-	"go-websocket/config"
-	"go-websocket/tools/Timer"
-	"go-websocket/tools/Tools"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
+	"nat-x/config"
+	"nat-x/tools/Timer"
+	"nat-x/tools/Tools"
 	"testing"
 	"time"
 )
