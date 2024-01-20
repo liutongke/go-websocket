@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go-websocket/tools"
 	clientv3 "go.etcd.io/etcd/client/v3"
-	"log"
 	"time"
 )
 
@@ -13,7 +12,7 @@ import (
 func startHeartbeat() {
 	client, err := clientv3.New(EtcdConfig())
 	if err != nil {
-		log.Println("Failed to create etcd client:", err)
+		tools.EchoErrorExit(fmt.Sprintf("Failed to create etcd client:%v", err))
 		return
 	}
 	defer client.Close()
@@ -24,6 +23,6 @@ func startHeartbeat() {
 	cancel()
 
 	if err != nil {
-		tools.EchoError(fmt.Sprintf("Etcd服务器连接失败,服务器终止运行:%v", err))
+		tools.EchoErrorExit(fmt.Sprintf("Etcd server connection failed, server terminated:%v", err))
 	}
 }

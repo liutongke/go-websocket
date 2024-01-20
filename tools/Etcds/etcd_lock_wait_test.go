@@ -3,6 +3,7 @@ package Etcds
 import (
 	"fmt"
 	"log"
+	"nat-x/config"
 	"testing"
 	"time"
 )

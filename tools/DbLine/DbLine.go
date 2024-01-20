@@ -31,6 +31,9 @@ func InitDbLine() {
 
 // 获取MySQL实例化
 func GetMysqlClient() *gorm.DB {
+	if Instance == nil {
+		tools.EchoErrorExit("mysql is not initialized")
+	}
 	return Instance
 }
 
@@ -43,11 +46,11 @@ func connect() *gorm.DB {
 	db, err = gorm.Open(getDialector(dbLines.Mysql.Addr), getGormConfig())
 
 	if err != nil {
-		tools.EchoError(fmt.Sprintf("GORM dial MySQL error: %v", err))
+		tools.EchoErrorExit(fmt.Sprintf("Failed to connect to mysql database: %v", err))
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		tools.EchoError(fmt.Sprintf("GORM MySQL init pool error : %v", err))
+		tools.EchoErrorExit(fmt.Sprintf("Failed to initialize mysql database: %v", err))
 	}
 
 	//最大空闲连接数（MaxIdleConns）：这是连接池中允许保持的最大空闲连接数。空闲连接是指当前没有被应用程序使用的连接。当应用程序需要新的数据库连接时，它会首先尝试从空闲连接中获取。如果空闲连接数已达到最大限制，则新的连接将被创建。

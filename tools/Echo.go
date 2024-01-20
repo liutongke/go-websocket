@@ -2,7 +2,7 @@ package tools
 
 import (
 	"fmt"
-	"os"
+	"log"
 )
 
 func EchoSuccess(str string) {
@@ -11,5 +11,7 @@ func EchoSuccess(str string) {
 
 func EchoError(str string) {
 	fmt.Printf("\033[1;31;40m%s\033[0m\n", str)
-	os.Exit(1)
+}
+func EchoErrorExit(str string) {
+	log.Fatalf("\033[1;31;40m%s\033[0m\n", str)
 }
