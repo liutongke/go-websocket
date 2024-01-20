@@ -1,0 +1,74 @@
+# This is a TOML document.
+
+title = "TOML Config"
+
+#转发服务器配置
+[Server]
+Port = "12223"
+mode = 0 #1 启动websocket方式 0 启动http方式
+Cluster = false #true集群false非集群
+TcpPort = "20000"#tcp连接的端口
+
+[logger]
+LogFolder = "log/"
+
+[GRPC]
+RpcPort = "8972"#grpc通信的端口地址
+IsOpenRpc = true #是否开启rpc
+Tsl = false #是否TLS/SSL 加密
+
+#redis连接配置
+[Redis]
+MaxIdle = 200#最大闲置连接数量
+MaxActive = 500#最大活动连接数
+IdleTimeout = 10#单位分钟 闲置过期时间 在get函数中会有逻辑 删除过期的连接
+Wait = false#设置如果活动连接达到上限 再获取时候是等待还是返回错误 如果是false 系统会返回redigo: connection pool exhausted
+Addr = ""   #数据库连接地址
+Port = "6379"
+Password = ""            #数据库密码
+DB = 0                  #数据库位置
+
+#MySQL连接配置
+[MySQL]
+Addr = "user:password@tcp(ip:port)/database"
+SetMaxIdleConn = 10
+SetMaxOpenConn = 100
+SetConnMaxLifetime = 60 #单位分钟
+LogLevel = 3 #日志级别 0 Silent：静默模式，不输出任何日志。 1 Error：错误级别，只输出错误日志。 2 Warn：警告级别，输出错误和警告日志。 3 Info：信息级别，输出错误、警告和信息日志。
+DateFormat = 1 #日志文件切分细度 1 每天记录 2每小时记录 暂时没实现切分，日志名称为启动那天日期
+LogFolder = "log" #日志储存位置
+Cmd = false #是否在控制台显示
+SlowThreshold = 1000 #单位毫秒
+
+[etcd]
+Open = true
+Addr = "ip:port"
+#0 DebugLevel: 调试级别日志，通常在生产环境中被禁用。
+#1 InfoLevel: 默认日志级别，用于普通信息的日志记录。
+#2 WarnLevel: 警告级别日志，比普通信息更重要，但不需要人工逐个审查。
+#3 ErrorLevel: 错误级别日志，高优先级。如果应用程序正常运行，不应生成任何错误级别的日志。
+#4 DPanicLevel: 重要错误级别日志，用于开发环境。在写入消息后，记录器会触发 panic。
+#5 PanicLevel: 日志一条消息，然后触发 panic。
+#6 FatalLevel: 日志一条消息，然后调用 os.Exit(1) 终止程序。
+LogLevel = 0 #日志级别
+LogFolder = "log" #日志储存位置
+Username = ""
+Password = ""
+MaxCallSendMsgSize = 2 #客户端发送请求的大小限制（以字节为单位）。如果设置为 0，则默认为 2.0 MiB。
+MaxCallRecvMsgSize = 2 #客户端接收响应的大小限制（以字节为单位）。如果设置为 0，则默认为 "math.MaxInt32"，因为范围响应可能超过请求发送限制。
+AutoSyncInterval = 0 #如果您希望客户端自动与 etcd 服务器同步最新的成员信息，可以设置一个合适的时间间隔。较短的间隔会更频繁地更新成员信息，但可能会增加网络流量和负载。如果您不需要自动同步，请将其设置为 0 禁用自动同步。
+DialTimeout = 50 #建立连接的超时时间,如果连接建立时间超过了该超时时间，将视为连接失败。建议根据网络延迟和服务器响应时间进行调整。
+DialKeepAliveTime = 10 #客户端向服务器发送保活探测的时间间隔
+DialKeepAliveTimeout = 100 #客户端等待保活探测的响应的超时时间。如果在此时间内未收到响应，则关闭连接。
+OutputPaths = "log/etcd.log"
+ErrorOutputPaths = "log/etcd_error.log"
+
+[CommonConf]
+ImagesFolder = "images"#图片本地文件夹
+ChunzhenIP = "config/qqwry.dat"
+MgCk = "config/mgck.json"
+
+[WebSocket]
+CleanConnection = true #是否清理连接
+HeartbeatExpirationTime = 600 #超时检测时间
+IsOpenWebsocket = true#false关闭true开启
