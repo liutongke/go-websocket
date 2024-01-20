@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-websocket/app/services/websocket"
 	"go-websocket/config"
+	"log"
 	"runtime/debug"
 	"time"
 )
@@ -23,7 +24,7 @@ func cleanConnection(param interface{}) {
 	}()
 
 	if config.GetConf().WebSocket.CleanConnection {
-		fmt.Println("定时任务，清理超时连接", param)
+		log.Println("定时任务，清理超时连接", param)
 		websocket.ClearTimeoutConnections()
 	}
 

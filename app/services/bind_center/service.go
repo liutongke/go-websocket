@@ -77,7 +77,8 @@ func (s *Server) InitSetServer() {
 	if err != nil {
 		return
 	}
-	log.Println("InitSetServer:", prefix.Kvs)
+
+	//log.Println("InitSetServer:", prefix.Kvs)
 	for _, item := range prefix.Kvs {
 		var data ServerInfo
 		err := json.Unmarshal(item.Value, &data)

@@ -5,7 +5,7 @@ import "time"
 type TomlConfig struct {
 	Server     server
 	Mysql      mysql
-	Redis      redis
+	Redis      Redis
 	Etcd       etcd
 	Grpc       grpc
 	Logger     logger
@@ -25,13 +25,17 @@ type server struct {
 }
 
 // redis连接配置
-type redis struct {
+type Redis struct {
 	MaxIdle     int           //最大闲置连接数量
 	MaxActive   int           //最大活动连接数
 	IdleTimeout time.Duration //闲置过期时间 在get函数中会有逻辑 删除过期的连接
+	Wait        bool
 	Addr        string
+	Port        string
 	Password    string
 	DB          int
+	MonitorLog  string
+	OpenMonitor bool
 }
 type mysql struct {
 	Addr               string
@@ -46,6 +50,7 @@ type mysql struct {
 }
 
 type etcd struct {
+	Open                 bool
 	Addr                 string
 	LogLevel             int
 	LogFolder            string
