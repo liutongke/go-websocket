@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/cast"
 	"go-websocket/app/services/bind_center"
 	"go-websocket/app/services/websocket"
-	"go-websocket/config"
 	"go-websocket/tools/DbLine"
 	"go-websocket/tools/RdLine"
 	"go-websocket/tools/Timer"
@@ -78,7 +77,7 @@ func Status(c *gin.Context) {
 
 	data["NumGoroutine"] = NumGoroutine // goroutine数量
 	data["NumCPU"] = NumCPU
-	data["configToml"] = config.GetConf()
+	//data["configToml"] = config.GetConf()
 	data["Redis status"] = map[string]int{
 		"ActiveCount 表示连接池中的活动连接数，包括正在使用的连接和空闲的连接":           redisStatus.ActiveCount,
 		"IdleCount 表示连接池中的空闲连接数":                             redisStatus.IdleCount,

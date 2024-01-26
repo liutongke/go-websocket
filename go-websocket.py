@@ -83,5 +83,4 @@ subprocess.run(
         '-itd',
         '-p', '12223:12223',
         '-p', '8972:8972',
-        '-v', f'{current_dir}/log:/var/www/html/log',
         image_name], check=True)
