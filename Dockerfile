@@ -1,5 +1,5 @@
 # 第一阶段：构建阶段
-FROM golang:1.20.4-bullseye as builder
+FROM golang:1.22-bullseye as builder
 
 WORKDIR /var/www/html
 

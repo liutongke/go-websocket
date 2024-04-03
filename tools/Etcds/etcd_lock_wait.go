@@ -1,4 +1,4 @@
-package Etcds
+package etcds
 
 import (
 	"context"

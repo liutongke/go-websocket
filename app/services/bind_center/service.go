@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-websocket/config"
-	"go-websocket/tools/Etcds"
-	"go-websocket/tools/Timer"
-	"go-websocket/tools/Tools"
+	"go-websocket/tools/etcds"
+	"go-websocket/tools/timer"
+	"go-websocket/tools/utils"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
 	"regexp"
@@ -53,13 +53,13 @@ func EventDel(event *clientv3.Event) {
 }
 
 // RegisterServer 将本机注册到etcd
-func RegisterServer(e *Etcds.EtcdRegister) {
-	key := fmt.Sprintf("%s%s:go-websocket", Etcds.ETCD_SERVER_LIST, Tools.GetLocalIp())
+func RegisterServer(e *etcds.EtcdRegister) {
+	key := fmt.Sprintf("%s%s:go-websocket", etcds.ETCD_SERVER_LIST, utils.GetLocalIp())
 
 	info := ServerInfo{
-		ServerIp: Tools.GetLocalIp(),
+		ServerIp: utils.GetLocalIp(),
 		Rpcport:  config.GetConf().Grpc.RpcPort,
-		Tm:       Timer.GetNowStr(),
+		Tm:       timer.GetNowStr(),
 	}
 	// 将Person对象转换为JSON字符串
 	val, err := json.Marshal(info)
@@ -73,7 +73,7 @@ func RegisterServer(e *Etcds.EtcdRegister) {
 func (s *Server) InitSetServer() {
 	rwMutex.Lock()
 	defer rwMutex.Unlock()
-	prefix, err := Etcds.GetPrefix(Etcds.ETCD_SERVER_LIST)
+	prefix, err := etcds.GetPrefix(etcds.ETCD_SERVER_LIST)
 	if err != nil {
 		return
 	}
@@ -133,7 +133,7 @@ func (s *Server) DelServer(key []byte) {
 
 // GetServiceToStr 获取ip+端口组合体字符串
 func GetServiceToStr() (str string) {
-	return fmt.Sprintf("%s:%s", Tools.GetLocalIp(), config.GetConf().Grpc.RpcPort)
+	return fmt.Sprintf("%s:%s", utils.GetLocalIp(), config.GetConf().Grpc.RpcPort)
 }
 
 // GetAllService 获取所有的服务器

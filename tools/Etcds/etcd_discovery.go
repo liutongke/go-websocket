@@ -1,12 +1,10 @@
-package Etcds
+package etcds
 
 import (
 	"context"
 	"fmt"
 	"go-websocket/tools"
-	"go-websocket/tools/Timer"
 	"go.etcd.io/etcd/client/v3"
-
 	"sync"
 )
 
@@ -54,7 +52,7 @@ func (e *EtcdDiscovery) EtcdStartDiscovery(keyPrefixes []string) {
 	for _, prefix := range keyPrefixes {
 		go e.watchPrefix(ctx, client, prefix)
 	}
-	tools.EchoSuccess(fmt.Sprintf("%s:发现服务启动成功", Timer.GetNowStr()))
+	tools.EchoSuccess("发现服务启动成功")
 
 	select {} // 阻塞主线程，等待程序退出
 }

@@ -1,4 +1,4 @@
-package Timer
+package timer
 
 import (
 	"time"
@@ -43,7 +43,7 @@ func GetUnixToStr(unixTimestamp int64, layout string) string {
 	return t.Format(layout)
 }
 
-// GetOffsetZeroUnix 获取偏移的时间戳 -3表示3天前  0表示当天 3表示未来3天
+// GetOffsetZeroUnix 获取偏移的零点时间戳 -3表示3天前  0表示当天 3表示未来3天
 func GetOffsetZeroUnix(offset int) int64 {
 	// 获取当前时间
 	now := currentTime()
@@ -91,11 +91,6 @@ func GetNowStr() string {
 	return formattedTime
 }
 
-// GetNowUnix 获取10位unix时间戳
-func GetNowUnix() int64 {
-	return currentTime().Unix()
-}
-
 // GetPrevHourId 获取上一个小时
 func GetPrevHourId() string {
 	previousHour := currentTime().Add(-time.Hour)
@@ -111,6 +106,15 @@ func GetAgoHourId(n int) string {
 	return hoursAgo.Format("2006010215")
 }
 
+// GetOffsetHourId 获取指定的偏移小时id
+func GetOffsetHourId(n int) string {
+	// 计算 n 小时前的时间
+	hoursAgo := currentTime().Add(time.Duration(n) * time.Hour)
+
+	//fmt.Println(n, "小时前的时间是:", hoursAgo)
+	return hoursAgo.Format("2006010215")
+}
+
 // GetNowHourId 获取当前小时
 func GetNowHourId() string {
 	//fmt.Println("当前时间：", currentTime)
@@ -118,8 +122,13 @@ func GetNowHourId() string {
 	return currentTime().Format("2006010215")
 }
 
-// GetMilliSecond 获取当前毫秒
-func GetMilliSecond() int64 {
+// GetNowUnix 获取10位unix时间戳
+func GetNowUnix() int64 {
+	return currentTime().Unix()
+}
+
+// GetNowMilliSecond 获取当前毫秒
+func GetNowMilliSecond() int64 {
 	milliseconds := currentTime().UnixNano() / int64(time.Millisecond)
 
 	//fmt.Println("当前毫秒时间：", milliseconds)
@@ -138,6 +147,68 @@ func GetMicroseconds() int64 {
 func GetFormat(layout string) string {
 	return currentTime().Format(layout)
 }
+
+// FormatTime 根据提供的布局和时间格式化时间，例如：layout 2006-01-02 15:04:05
+func FormatTime(t time.Time, layout string) string {
+	return t.Format(layout)
+}
+
+// GetUnixFromTime 获取指定时间unix时间，例如：获取 2023 年 7 月 31 日 12 时 0 分 0 秒的 Unix 时间戳
+// unixTimestamp := GetUnixTimestamp(2023, 7, 31, 12, 0, 0)
+func GetUnixFromTime(year, month, day, hour, minute, second int) int64 {
+	// 构造指定时间
+	targetTime := time.Date(year, time.Month(month), day, hour, minute, second, 0, currentTime().Location())
+
+	// 获取对应的 Unix 时间戳
+	unixTimestamp := targetTime.Unix()
+	return unixTimestamp
+}
+
+// GetMillisecondsFromTime 获取指定时间的毫秒，例如：2050年1月1日0点0分0秒的毫秒数
+// milliseconds := GetMillisecondsFromTime(2050, 1, 1, 0, 0, 0, 0)
+func GetMillisecondsFromTime(year int, month time.Month, day, hour, minute, second, millisecond int) int64 {
+	targetTime := time.Date(year, month, day, hour, minute, second, millisecond*int(time.Millisecond), currentTime().Location())
+	return targetTime.UnixNano() / int64(time.Millisecond)
+}
+
+// GetMicrosecondsFromTime 获取指定微秒，例如：获取 2023 年 7 月 31 日 12 时 0 分 0 秒 500 微秒的 Unix 时间戳（微秒）
+// microseconds := GetMicroseconds(2023, 7, 31, 12, 0, 0, 500)
+func GetMicrosecondsFromTime(year, month, day, hour, minute, second, microsecond int) int64 {
+	// 构造指定时间
+	targetTime := time.Date(year, time.Month(month), day, hour, minute, second, microsecond*1000, currentTime().Location())
+
+	// 获取对应的 Unix 时间戳
+	unixTimestamp := targetTime.UnixNano() / 1000 // 转换为微秒
+
+	return unixTimestamp
+}
+
+// GetHourUnixTimestamp 获取当天指定 24 小时中某个小时的 Unix 时间戳 例如：unixTimestamp := GetHourUnixTimestamp(23)
+func GetHourUnixTimestamp(hour int) int64 {
+	now := currentTime()
+	date := time.Date(now.Year(), now.Month(), now.Day(), hour, 0, 0, 0, currentTime().Location())
+	return date.Unix()
+}
+
+// GetNextWeekTime 获取下一个星期几的特定小时、分钟、秒的时间 例如：获取下一个星期二的15点30分30秒
+//func GetNextWeekTime(weekday time.Weekday, hour, minute, second int) time.Time {
+//	now := currentTime()
+//	daysUntilWeekday := (int(weekday) - int(now.Weekday()) + 7) % 7
+//	if daysUntilWeekday == 0 {
+//		// 如果今天就是指定的星期几，则计算下一个星期几
+//		daysUntilWeekday = 7
+//	}
+//	targetDate := now.AddDate(0, 0, daysUntilWeekday)
+//	return time.Date(targetDate.Year(), targetDate.Month(), targetDate.Day(), hour, minute, second, 0, currentTime().Location())
+//}
+
+// GetNowWeekTime 获取当前星期几的特定小时、分钟、秒的时间 例如：获取下一个星期二的15点30分30秒
+//func GetNowWeekTime(weekday time.Weekday, hour, minute, second int) time.Time {
+//	now := currentTime()
+//	daysUntilWeekday := (int(weekday) - int(now.Weekday()) + 7) % 7
+//	targetDate := now.AddDate(0, 0, daysUntilWeekday)
+//	return time.Date(targetDate.Year(), targetDate.Month(), targetDate.Day(), hour, minute, second, 0, currentTime().Location())
+//}
 
 //var cstZone = time.FixedZone("CST", 8*3600) // 东八
 //

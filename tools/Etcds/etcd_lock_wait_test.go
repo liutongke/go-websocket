@@ -1,9 +1,9 @@
-package Etcds
+package etcds
 
 import (
 	"fmt"
+	"go-websocket/config"
 	"log"
-	"nat-x/config"
 	"testing"
 	"time"
 )

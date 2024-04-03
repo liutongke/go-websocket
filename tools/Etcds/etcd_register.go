@@ -1,13 +1,11 @@
-package Etcds
+package etcds
 
 import (
 	"context"
 	"fmt"
 	"go-websocket/tools"
-	"go-websocket/tools/Timer"
 	"go.etcd.io/etcd/client/v3"
 	"log"
-
 	"sync"
 	"time"
 )
@@ -73,7 +71,7 @@ func (e *EtcdRegister) EtcdStartRegister(fun FunRegister) {
 	//e.RegisterServer() //注册本机
 	fun(e) //注册本机
 
-	tools.EchoSuccess(fmt.Sprintf("%s:注册服务启动成功 - 租约lease ID:%d", Timer.GetNowStr(), resp.ID))
+	tools.EchoSuccess(fmt.Sprintf("注册服务启动成功 - 租约lease ID:%d", resp.ID))
 
 	// 等待终止通知
 	<-doneChan

@@ -1,12 +1,12 @@
-package Logger
+package logger
 
 import (
 	"bufio"
 	"fmt"
 	"go-websocket/config"
 	"go-websocket/tools"
-	"go-websocket/tools/Dir"
-	"go-websocket/tools/Timer"
+	"go-websocket/tools/fileutil"
+	"go-websocket/tools/timer"
 	"os"
 	"runtime"
 )
@@ -44,14 +44,17 @@ func (l *Logger) runLogs() {
 
 // 写入日志信息2021-01-08 12:09:22|DEBUG|REQ:App.Auth.Index|
 func (fl *Logger) log(saveName string, Level string) {
-	file, err := os.OpenFile(Dir.GetAbsDirPath(config.GetConf().Logger.LogFolder+"logger_"+saveName+"_"+Timer.GetDateId()+".log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logPath := fmt.Sprintf("%s/logger_%s_%s.log", fileutil.GetAbsDirPath(config.GetConf().Logger.LogFolder), saveName, timer.GetDateId())
+
+	//fileutil.GetAbsDirPath(config.GetConf().Logger.LogFolder+"logger_"+saveName+"_"+timer.GetDateId()+".log")
+	file, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		tools.EchoError(fmt.Sprintf("open logger file failed err: %v", err))
 	}
 	defer file.Close()
 	//fileName, filePath, line := getRunInfo(1)
-	//log := Timer.GetNowStr() + "|" + Level + "|" + saveName + "\n" + "|line:" + strconv.Itoa(line) + "|func name:" + fileName + "|file:" + filePath //将要打印的信息
-	log := Timer.GetNowStr() + " | " + Level
+	//log := timer.GetNowStr() + "|" + Level + "|" + saveName + "\n" + "|line:" + strconv.Itoa(line) + "|func name:" + fileName + "|file:" + filePath //将要打印的信息
+	log := fmt.Sprintf("[%s] | %s | %s \n", timer.GetNowStr(), saveName, Level)
 	writer := bufio.NewWriter(file)
 	//writer.WriteString(Level + "\n") //将数据先写入缓存
 	writer.WriteString(log) //将数据先写入缓存

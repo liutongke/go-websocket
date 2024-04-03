@@ -7,13 +7,12 @@ import (
 	"go-websocket/app/services/task"
 	"go-websocket/config"
 	routers "go-websocket/routes"
-	"go-websocket/tools/DbLine"
-	"go-websocket/tools/Dir"
-	"go-websocket/tools/Etcds"
-	"go-websocket/tools/Logger"
-	"go-websocket/tools/RdLine"
+	"go-websocket/tools/dbutil"
+	"go-websocket/tools/etcds"
+	"go-websocket/tools/logger"
+	"go-websocket/tools/redisutil"
+	"go-websocket/tools/utils"
 	"go-websocket/tools/validates"
-	"log"
 )
 
 // 初始化配置
@@ -21,16 +20,16 @@ func InitializeService() {
 	mkdir()                  //启动项目时判断下文件夹
 	validates.InitValidate() //初始化参数验证
 	config.Init()            //初始化配置文件
-	Logger.InitLogger()      //初始化日志
-	DbLine.InitDbLine()
-	RdLine.InitRdLine()
+	logger.InitLogger()      //初始化日志
+	dbutil.InitDbLine()
+	redisutil.InitRdLine()
 	bind_center.NewService().InitSetServer() //初始化绑定
 
 	if config.GetConf().Etcd.Open {
 		//初始化发现服务
-		go Etcds.NewEtcdDiscovery(map[string]Etcds.FunDiscovery{"put": bind_center.EventPut, "del": bind_center.EventDel}).EtcdStartDiscovery([]string{"/prefix1", "/prefix2", "/net", "go-nat-x", Etcds.ETCD_SERVER_LIST, Etcds.ETCD_PREFIX_ACCOUNT_INFO})
+		go etcds.NewEtcdDiscovery(map[string]etcds.FunDiscovery{"put": bind_center.EventPut, "del": bind_center.EventDel}).EtcdStartDiscovery([]string{"/prefix1", "/prefix2", "/net", "go-nat-x", etcds.ETCD_SERVER_LIST, etcds.ETCD_PREFIX_ACCOUNT_INFO})
 		//初始化注册服务
-		go Etcds.NewEtcdRegister().EtcdStartRegister(bind_center.RegisterServer)
+		go etcds.NewEtcdRegister().EtcdStartRegister(bind_center.RegisterServer)
 	}
 
 	routers.InitWsRouters()
@@ -45,12 +44,6 @@ func InitializeService() {
 
 // 启动创建文件夹
 func mkdir() {
-	list := [...]string{"./config", "./log"}
-	for _, v := range list {
-		if Dir.MkDirAll(v) {
-			log.Printf("文件夹%s已经存在！", v)
-		} else {
-			log.Printf("创建文件夹%s成功！", v)
-		}
-	}
+	utils.CreateDirectoryIfNotExist("config") //初始化一些文件
+	utils.CreateDirectoryIfNotExist("log")    //初始化一些文件
 }

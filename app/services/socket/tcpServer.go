@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"go-websocket/config"
-	"go-websocket/tools/Timer"
+	"go-websocket/tools/timer"
 	"net"
 	"strconv"
 )
@@ -23,7 +23,7 @@ func StartTcp() {
 				fmt.Println(fmt.Sprintf("accept failed, err:%v", err))
 				continue
 			}
-			client := NewTcpClient(1, "1", conn, uint64(Timer.GetNowUnix()))
+			client := NewTcpClient(1, "1", conn, uint64(timer.GetNowUnix()))
 			go client.writePump() //发送客户端信息
 			go client.readPump()  //读取客户端信息
 		}
@@ -57,7 +57,7 @@ func (t *TcpClient) readPump() {
 		}
 		recvStr := string(buf[:n])
 		fmt.Println("收到client端发来的数据：", recvStr)
-		t.Send <- []byte("服务器收到了你的消息了" + strconv.FormatInt(Timer.GetNowUnix(), 10))
+		t.Send <- []byte("服务器收到了你的消息了" + strconv.FormatInt(timer.GetNowUnix(), 10))
 	}
 }
 

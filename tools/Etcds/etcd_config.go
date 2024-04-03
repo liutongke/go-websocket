@@ -1,12 +1,11 @@
-package Etcds
+package etcds
 
 import (
 	"go-websocket/config"
-	"go-websocket/tools/Dir"
+	"go-websocket/tools/fileutil"
 	"go.etcd.io/etcd/client/v3"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-
 	"time"
 )
 
@@ -51,8 +50,8 @@ func getLogConfig() *zap.Config {
 	return &zap.Config{
 		Level:            zap.NewAtomicLevelAt(getLogLevel()),
 		Encoding:         "json",
-		OutputPaths:      []string{Dir.GetAbsDirPath(config.GetConf().Etcd.OutputPaths)},
-		ErrorOutputPaths: []string{Dir.GetAbsDirPath(config.GetConf().Etcd.ErrorOutputPaths)},
+		OutputPaths:      []string{fileutil.GetAbsDirPath(config.GetConf().Etcd.OutputPaths)},
+		ErrorOutputPaths: []string{fileutil.GetAbsDirPath(config.GetConf().Etcd.ErrorOutputPaths)},
 		Development:      false,
 	}
 }

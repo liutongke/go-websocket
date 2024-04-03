@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-websocket/config"
-	"go-websocket/tools/RdLine"
-	"go-websocket/tools/Tools"
+	"go-websocket/tools/redisutil"
+	"go-websocket/tools/utils"
 )
 
 const keys = "uBindServ"
@@ -17,7 +17,7 @@ type BindUserInfo struct {
 
 // GetBindInfo 获取用户的绑定信息
 func GetBindInfo(userId int) BindUserInfo {
-	RdLine := RdLine.GetRedisClient()
+	RdLine := redisutil.GetRedisClient()
 	defer RdLine.CloseRedisClient()
 	bindInfo, err := RdLine.Bytes(RdLine.Exec("hGet", keys, userId))
 	var bindUserInfo BindUserInfo
@@ -31,11 +31,11 @@ func GetBindInfo(userId int) BindUserInfo {
 // BindUidAndService 将用户与应用服务器地址绑定
 func BindUidAndService(userId int) bool {
 	b, err := json.Marshal(BindUserInfo{
-		RpcAddr: fmt.Sprintf("%s:%s", Tools.GetLocalIp(), config.GetConf().Grpc.RpcPort),
+		RpcAddr: fmt.Sprintf("%s:%s", utils.GetLocalIp(), config.GetConf().Grpc.RpcPort),
 		UserId:  userId,
 	})
 	if err == nil {
-		RdLine := RdLine.GetRedisClient()
+		RdLine := redisutil.GetRedisClient()
 		defer RdLine.CloseRedisClient()
 		RdLine.Exec("hSet", keys, userId, string(b))
 		RdLine.Exec("EXPIRE", keys, 84600)
@@ -46,7 +46,7 @@ func BindUidAndService(userId int) bool {
 
 // DelBindUidAndService 退出登录的时候删掉防止占用内容太大
 func DelBindUidAndService(userId int) {
-	RdLine := RdLine.GetRedisClient()
+	RdLine := redisutil.GetRedisClient()
 	defer RdLine.CloseRedisClient()
 	RdLine.Exec("hDel", keys, userId)
 }

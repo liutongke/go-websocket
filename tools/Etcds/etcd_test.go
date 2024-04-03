@@ -1,14 +1,13 @@
-package Etcds
+package etcds
 
 import (
 	"encoding/json"
 	"fmt"
 	"go-websocket/config"
-	"go-websocket/tools/Timer"
-	"go-websocket/tools/Tools"
+	"go-websocket/tools/timer"
+	"go-websocket/tools/utils"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
-
 	"testing"
 	"time"
 )
@@ -17,8 +16,8 @@ func TestEtcdClient(t *testing.T) {
 	config.InitTest()
 	log.Println("EtcdConfig:", EtcdConfig())
 
-	key := fmt.Sprintf("/TestEtcd/%d", Timer.GetNowUnix())
-	log.Println("Put:", Put(key, Timer.GetNowStr()))
+	key := fmt.Sprintf("/TestEtcd/%d", timer.GetNowUnix())
+	log.Println("Put:", Put(key, timer.GetNowStr()))
 
 	resp, _ := Get(key)
 	for _, item := range resp.Kvs {
@@ -71,12 +70,12 @@ type ServerInfo struct {
 }
 
 func RegisterServer(e *EtcdRegister) {
-	key := fmt.Sprintf("%s%s:nat-x", ETCD_SERVER_LIST, Tools.GetLocalIp())
+	key := fmt.Sprintf("%s%s:nat-x", ETCD_SERVER_LIST, utils.GetLocalIp())
 
 	info := ServerInfo{
-		ServerIp: Tools.GetLocalIp(),
+		ServerIp: utils.GetLocalIp(),
 		Rpcport:  "nat-x",
-		Tm:       Timer.GetNowStr(),
+		Tm:       timer.GetNowStr(),
 	}
 	// 将Person对象转换为JSON字符串
 	val, err := json.Marshal(info)

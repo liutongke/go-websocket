@@ -1,4 +1,4 @@
-package Etcds
+package etcds
 
 const (
 	ETCD_SERVER_LIST         = "/etcd_server_list/"
